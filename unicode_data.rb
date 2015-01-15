@@ -1,5 +1,4 @@
 require 'csv'
-require 'byebug'
 
 module UnicodeData
   DATA ||= CSV.parse(File.read("./unicode_data.csv"), {:col_sep => ';'})

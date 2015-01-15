@@ -1,25 +1,13 @@
 {
   "RSpec": {
     "coverage": {
-      "/Users/joel/Code/commonmark_parslet/unicode_data.rb": [
-        1,
-        1,
-        null,
-        1,
+      "/Users/joel/Code/commonmark_parslet/spec/transform_spec.rb": [
         1,
         null,
         1,
-        1,
-        null,
-        1,
-        null,
-        0,
-        0,
-        null,
-        null,
         null
       ]
     },
-    "timestamp": 1421346214
+    "timestamp": 1421353810
   }
 }
