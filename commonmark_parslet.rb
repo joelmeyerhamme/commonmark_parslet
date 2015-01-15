@@ -1,5 +1,6 @@
 require 'parslet'
 require 'rspec'
+require 'parslet/rig/rspec'
 require './unicode_data'
 
 require 'byebug'
@@ -21,7 +22,7 @@ class CommonMark
       end
 
       rule(:whitespace) do
-        whitespace_character.repeat >> whitespace_character.absent?
+        whitespace_character.repeat(1)
       end
 
       rule(:tab)             { str("\u0009") }
@@ -72,53 +73,53 @@ describe CommonMark::Parser::Preliminaries do
   end
 
   it "should parse anything at all" do
-    expect(subject.parse(".")).to eq(".")
+    expect(subject).to parse(".")
   end
 
   it "should parse whitespace" # do
     # pending "freeze"
-    # expect(subject.parse("\u0009")).to eq("\u0009")
-    # expect(subject.parse("\u0020")).to eq("\u0020")
-    # expect(subject.parse("\u000d")).to eq("\u000d")
-    # expect(subject.parse("\u0000")).to eq("")
-    # expect(subject.parse("\u000a")).to eq("\u000a")
+    # expect(subject).to parse("\u0009")
+    # expect(subject).to parse("\u0020")
+    # expect(subject).to parse("\u000d")
+    # expect(subject).to parse("\u0000")
+    # expect(subject).to parse("\u000a")
   # end
 
   it "should parse ascii punctuation" # do
     # pending "freeze"
-    # expect(subject.parse('!')).to  eq('!')
-    # expect(subject.parse('"')).to  eq('"')
-    # expect(subject.parse('#')).to  eq('#')
-    # expect(subject.parse('$')).to  eq('$')
-    # expect(subject.parse('%')).to  eq('%')
-    # expect(subject.parse('&')).to  eq('&')
-    # expect(subject.parse('\'')).to eq('\'')
-    # expect(subject.parse('(')).to  eq('(')
-    # expect(subject.parse(')')).to  eq(')')
-    # expect(subject.parse('*')).to  eq('*')
-    # expect(subject.parse('+')).to  eq('+')
-    # expect(subject.parse(',')).to  eq(',')
-    # expect(subject.parse('-')).to  eq('-')
-    # expect(subject.parse('.')).to  eq('.')
-    # expect(subject.parse('/')).to  eq('/')
-    # expect(subject.parse(':')).to  eq(':')
-    # expect(subject.parse(';')).to  eq(';')
-    # expect(subject.parse('<')).to  eq('<')
-    # expect(subject.parse('=')).to  eq('=')
-    # expect(subject.parse('>')).to  eq('>')
-    # expect(subject.parse('?')).to  eq('?')
-    # expect(subject.parse('@')).to  eq('@')
-    # expect(subject.parse('[')).to  eq('[')
-    # expect(subject.parse('\\')).to eq('\\')
-    # expect(subject.parse(']')).to  eq(']')
-    # expect(subject.parse('^')).to  eq('^')
-    # expect(subject.parse('_')).to  eq('_')
-    # expect(subject.parse('`')).to  eq('`')
-    # expect(subject.parse('{')).to  eq('{')
-    # expect(subject.parse('|')).to  eq('|')
-    # expect(subject.parse('}')).to  eq('}')
-    # expect(subject.parse('|')).to  eq('|')
-    # expect(subject.parse('~')).to  eq('~')
+    # expect(subject).to parse('!')
+    # expect(subject).to parse('"')
+    # expect(subject).to parse('#')
+    # expect(subject).to parse('$')
+    # expect(subject).to parse('%')
+    # expect(subject).to parse('&')
+    # expect(subject).to parse('\'')
+    # expect(subject).to parse('(')
+    # expect(subject).to parse(')')
+    # expect(subject).to parse('*')
+    # expect(subject).to parse('+')
+    # expect(subject).to parse(',')
+    # expect(subject).to parse('-')
+    # expect(subject).to parse('.')
+    # expect(subject).to parse('/')
+    # expect(subject).to parse(':')
+    # expect(subject).to parse(';')
+    # expect(subject).to parse('<')
+    # expect(subject).to parse('=')
+    # expect(subject).to parse('>')
+    # expect(subject).to parse('?')
+    # expect(subject).to parse('@')
+    # expect(subject).to parse('[')
+    # expect(subject).to parse('\\')
+    # expect(subject).to parse(']')
+    # expect(subject).to parse('^')
+    # expect(subject).to parse('_')
+    # expect(subject).to parse('`')
+    # expect(subject).to parse('{')
+    # expect(subject).to parse('|')
+    # expect(subject).to parse('}')
+    # expect(subject).to parse('|')
+    # expect(subject).to parse('~')
   # end
 
   it "should parse unicode whitespace"
