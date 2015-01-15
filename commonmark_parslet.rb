@@ -10,7 +10,7 @@ class CommonMark
       root(:line)
 
       rule(:line) { character.repeat }
-      rule(:character) { (whitespace | punctuation | any) }
+      rule(:character) { whitespace | punctuation | any }
 
       rule(:whitespace_character) do
         space | unicode_space | tab | carriage_return | newline
@@ -20,7 +20,10 @@ class CommonMark
         carriage_return >> newline | newline | carriage_return
       end
 
-      rule(:whitespace)      { whitespace_character.repeat }
+      rule(:whitespace) do
+        whitespace_character.repeat >> whitespace_character.absent?
+      end
+
       rule(:tab)             { str("\u0009") }
       rule(:space)           { str("\u0020") }
       rule(:carriage_return) { str("\u000d") }
@@ -29,6 +32,7 @@ class CommonMark
       rule(:blank_line)      { whitespace >> eol }
 
       rule(:non_space) { space.absent? >> any }
+
       rule(:ascii_punctuation) do
         str('!')  | str('"') | str('#') | str('$') | str('%') | str('&')  |
         str('\'') | str('(') | str(')') | str('*') | str('+') | str(',')  |
@@ -54,22 +58,34 @@ class CommonMark
       rule(:punctuation) { ascii_punctuation | unicode_punctuation }
     end
   end
+
+  class Transform
+    class HTML < Parslet::Transform
+    end
+  end
 end
 
-# class CommonMark::Transform::HTML < Parslet::Transform
-# end
 
 describe CommonMark::Parser::Preliminaries do
-  it "should parse whitespace" do
-    expect(subject.parse("\u0009")).to eq("\u0009")
+  subject do
+    described_class.new.character
+  end
+
+  it "should parse anything at all" do
+    expect(subject.parse(".")).to eq(".")
+  end
+
+  it "should parse whitespace" # do
+    # pending "freeze"
+    # expect(subject.parse("\u0009")).to eq("\u0009")
     # expect(subject.parse("\u0020")).to eq("\u0020")
     # expect(subject.parse("\u000d")).to eq("\u000d")
     # expect(subject.parse("\u0000")).to eq("")
     # expect(subject.parse("\u000a")).to eq("\u000a")
-  end
+  # end
 
-  it "should parse ascii punctuation" do
-    pending "freeze"
+  it "should parse ascii punctuation" # do
+    # pending "freeze"
     # expect(subject.parse('!')).to  eq('!')
     # expect(subject.parse('"')).to  eq('"')
     # expect(subject.parse('#')).to  eq('#')
@@ -103,11 +119,11 @@ describe CommonMark::Parser::Preliminaries do
     # expect(subject.parse('}')).to  eq('}')
     # expect(subject.parse('|')).to  eq('|')
     # expect(subject.parse('~')).to  eq('~')
-  end
+  # end
 
   it "should parse unicode whitespace"
   it "should parse unicode punctuation"
 end
 
-# describe CommonMark::Transform::HTML
-# end
+describe CommonMark::Transform::HTML do
+end
