@@ -16,14 +16,20 @@ class CommonMark
         '!', '"', '#', '$', '%', '&', '\'', '(', ')', '*', '+',
         ',', '-', '.', '/', ':', ';', '<', '=', '>', '?', '@',
         '[', '\\', ']', '^', '_', '`', '{', '|', '}', '|', '~']
-
       UNICODE_PUNCTUATION ||= UnicodeData::CharClass[
-        "Pc", "Pd", "Pe", "Pf", "Pi", "Po", "Ps"].map do |ch|
-        ch.to_i(16).chr('utf-8')
+        "Pc", "Pd", "Pe", "Pf", "Pi", "Po", "Ps"]
+      UNICODE_SPACE ||= UnicodeData::CharClass["Zs"]
+
+      def self.unicode_punctuation
+        @@unicode_punctuation ||= UNICODE_PUNCTUATION.map do |ch|
+          ch.to_i(16).chr('utf-8')
+        end
       end
 
-      UNICODE_SPACE ||= UnicodeData::CharClass["Zs"].map do |ch|
-        ch.to_i(16).chr('utf-8')
+      def self.unicode_space
+        @@unicode_space ||= UNICODE_SPACE.map do |ch|
+          ch.to_i(16).chr('utf-8')
+        end
       end
 
       root(:line)
@@ -57,12 +63,11 @@ class CommonMark
       end
 
       rule(:unicode_punctuation) do
-        UNICODE_PUNCTUATION.
-          map { |ch| str(ch) }.reduce(:|)
+        self.class.unicode_punctuation.map { |ch| str(ch) }.reduce(:|)
       end
 
       rule(:unicode_space) do
-        UNICODE_SPACE.map { |ch| str(ch) }.reduce(:|)
+        self.class.unicode_space.map { |ch| str(ch) }.reduce(:|)
       end
 
       rule(:punctuation) { ascii_punctuation | unicode_punctuation }
@@ -92,13 +97,13 @@ describe CommonMark::Parser::Preliminaries do
   end
 
   it "should parse unicode whitespace" do
-    CommonMark::Parser::Preliminaries::UNICODE_SPACE.each do |ch|
+    CommonMark::Parser::Preliminaries.unicode_space.each do |ch|
       is_expected.to parse(ch)
     end
   end
 
   it "should parse unicode punctuation" do
-    CommonMark::Parser::Preliminaries::UNICODE_PUNCTUATION.each do |ch|
+    CommonMark::Parser::Preliminaries.unicode_punctuation.each do |ch|
       is_expected.to parse(ch)
     end
   end
