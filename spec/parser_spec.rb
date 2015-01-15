@@ -10,7 +10,7 @@ describe CommonMark::Parser::Preliminaries do
   end
 
   it "should parse ascii punctuation" do
-    CommonMark::Parser::Preliminaries::ASCII_PUNCTUATION.each do |p|
+    CommonMark::Parser::Preliminaries::ascii_punctuation.each do |p|
       is_expected.to parse(p)
     end
   end
