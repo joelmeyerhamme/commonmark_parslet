@@ -1,6 +1,5 @@
-class CommonMark
-  class Transform
-    class HTML < Parslet::Transform
-    end
-  end
+class CommonMark::Transform < Parslet::Transform
+end
+
+class CommonMark::Transform::HTML < Parslet::Transform
 end

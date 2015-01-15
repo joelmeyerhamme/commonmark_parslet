@@ -5,9 +5,31 @@
         1,
         null,
         1,
+        1,
+        1,
+        null,
+        null,
+        1,
+        1,
+        1,
+        null,
+        null,
+        null
+      ],
+      "/Users/joel/Code/commonmark_parslet/spec/unicode_data_spec.rb": [
+        1,
+        null,
+        1,
+        2,
+        null,
+        1,
+        null,
+        1,
+        null,
+        null,
         null
       ]
     },
-    "timestamp": 1421362913
+    "timestamp": 1421365333
   }
 }

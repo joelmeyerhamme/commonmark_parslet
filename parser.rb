@@ -23,62 +23,77 @@ class CommonMark::Parser::Preliminaries < Parslet::Parser
 
   root(:line)
 
+  # rule(:line)
   def line
     character.repeat
   end
 
+  # rule(:character)
   def character
     whitespace | punctuation | any
   end
 
+  # rule(:whitespace_character)
   def whitespace_character
     space | unicode_space | tab | carriage_return | newline
   end
 
+  # rule(:eol)
   def eol
     carriage_return >> newline | newline | carriage_return
   end
 
+  # rule(:whitespace)
   def whitespace
     whitespace_character.repeat(1)
   end
 
+  # rule(:tab)
   def tab
     str("\t")
   end
 
+  # rule(:space)
   def space
     str(" ")
   end
 
+  # rule(:carriage_return)
   def carriage_return
     str("\r")
   end
 
+  # rule(:null)
   def null
     str("\0")
   end
 
+  # rule(:newline)
   def newline
     str("\n")
   end
 
+  # rule(:blank_line)
   def blank_line
     whitespace >> eol
   end
 
+  # rule(:non_space)
   def non_space
     space.absent? >> any
   end
 
+  # rule(:ascii_punctuation)
   def ascii_punctuation
     self.class.ascii_punctuation_chars.map { |s| str(s) }.reduce(:|)
   end
 
+  # rule(:unicode_punctuation)
   def unicode_punctuation
     self.class.unicode_punctuation_chars.map { |ch| str(ch) }.reduce(:|)
   end
 
+  # rule(:unicode_space)
   def unicode_space
     self.class.unicode_space_chars.map { |ch| str(ch) }.reduce(:|)
   end

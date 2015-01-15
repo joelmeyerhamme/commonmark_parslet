@@ -1,3 +1,9 @@
+GIT
+  remote: git://github.com/joelmeyerhamme/method_call.git
+  revision: b4be700b9c72b35928b18a1ca68ea187b238ea9c
+  specs:
+    method_call (1.0.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -100,6 +106,7 @@ DEPENDENCIES
   byebug
   codeclimate-test-reporter
   coveralls
+  method_call!
   parslet
   rspec
   travis

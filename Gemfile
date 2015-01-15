@@ -1,6 +1,7 @@
 source 'https://rubygems.org'
 
 gem 'parslet'
+gem 'method_call', github: 'joelmeyerhamme/method_call'
 
 group 'development' do
   gem 'byebug'
