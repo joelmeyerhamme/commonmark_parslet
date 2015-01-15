@@ -74,9 +74,6 @@ end
 
 describe CommonMark::Parser::Preliminaries do
   it "should parse whitespace" do
-    CommonMark::Parser::Preliminaries::ASCII_PUNCTUATION
-    CommonMark::Parser::Preliminaries::UNICODE_PUNCTUATION
-    CommonMark::Parser::Preliminaries::UNICODE_SPACE
     is_expected.to parse("\t")
     is_expected.to parse(" ")
     is_expected.to parse("\r")
@@ -85,52 +82,21 @@ describe CommonMark::Parser::Preliminaries do
   end
 
   it "should parse ascii punctuation" do
-    is_expected.to parse('!')
-    is_expected.to parse('"')
-    is_expected.to parse('#')
-    is_expected.to parse('$')
-    is_expected.to parse('%')
-    is_expected.to parse('&')
-    is_expected.to parse('\'')
-    is_expected.to parse('(')
-    is_expected.to parse(')')
-    is_expected.to parse('*')
-    is_expected.to parse('+')
-    is_expected.to parse(',')
-    is_expected.to parse('-')
-    is_expected.to parse('.')
-    is_expected.to parse('/')
-    is_expected.to parse(':')
-    is_expected.to parse(';')
-    is_expected.to parse('<')
-    is_expected.to parse('=')
-    is_expected.to parse('>')
-    is_expected.to parse('?')
-    is_expected.to parse('@')
-    is_expected.to parse('[')
-    is_expected.to parse('\\')
-    is_expected.to parse(']')
-    is_expected.to parse('^')
-    is_expected.to parse('_')
-    is_expected.to parse('`')
-    is_expected.to parse('{')
-    is_expected.to parse('|')
-    is_expected.to parse('}')
-    is_expected.to parse('|')
-    is_expected.to parse('~')
+    CommonMark::Parser::Preliminaries::ASCII_PUNCTUATION.each do |p|
+      is_expected.to parse(p)
+    end
   end
 
   it "should parse unicode whitespace" do
-    UnicodeData::CharClass["Zs"].each do |ch|
-      is_expected.to parse(ch.to_i(16).chr('utf-8'))
+    CommonMark::Parser::Preliminaries::UNICODE_SPACE.each do |ch|
+      is_expected.to parse(ch)
     end
   end
 
   it "should parse unicode punctuation" do
-    UnicodeData::CharClass["Pc", "Pd", "Pe", "Pf", "Pi", "Po", "Ps"].
-      each do |ch|
-        is_expected.to parse(ch.to_i(16).chr('utf-8'))
-      end
+    CommonMark::Parser::Preliminaries::UNICODE_PUNCTUATION.each do |ch|
+      is_expected.to parse(ch)
+    end
   end
 end
 
