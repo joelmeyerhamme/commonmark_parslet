@@ -3,10 +3,11 @@ require './commonmark_parslet'
 class CommonMark
   class Parser
     class Preliminaries < Parslet::Parser
-      ASCII_PUNCTUATION = [
-        '!', '"', '#', '$', '%', '&', '\'', '(', ')', '*', '+',
-        ',', '-', '.', '/', ':', ';', '<', '=', '>', '?', '@',
-        '[', '\\', ']', '^', '_', '`', '{', '|', '}', '|', '~']
+      def self.ascii_punctuation
+        [ '!', '"', '#', '$', '%', '&', '\'', '(', ')', '*', '+',
+          ',', '-', '.', '/', ':', ';', '<', '=', '>', '?', '@',
+          '[', '\\', ']', '^', '_', '`', '{', '|', '}', '|', '~' ]
+      end
 
       def self.unicode_punctuation
         @@unicode_punctuation ||= begin
@@ -50,7 +51,7 @@ class CommonMark
       rule(:non_space) { space.absent? >> any }
 
       rule(:ascii_punctuation) do
-        ASCII_PUNCTUATION.map { |s| str(s) }.reduce(:|)
+        self.class.ascii_punctuation.map { |s| str(s) }.reduce(:|)
       end
 
       rule(:unicode_punctuation) do
