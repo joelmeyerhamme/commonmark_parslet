@@ -1,6 +1,13 @@
 source 'https://rubygems.org'
 
-gem "codeclimate-test-reporter", group: :test, require: nil
 gem "parslet"
-gem "rspec"
-gem "byebug"
+
+group 'development' do
+  gem "byebug"
+end
+
+group "test" do
+  gem "rspec"
+  gem "rake"
+  gem "codeclimate-test-reporter", require: nil
+end
