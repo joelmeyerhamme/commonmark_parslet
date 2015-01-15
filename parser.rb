@@ -3,13 +3,14 @@ require './commonmark_parslet'
 class CommonMark
   class Parser
     class Preliminaries < Parslet::Parser
-      def self.ascii_punctuation
-        [ '!', '"', '#', '$', '%', '&', '\'', '(', ')', '*', '+',
+      def ascii_punctuation_chars
+        @@ascii_punctuation ||= [
+          '!', '"', '#', '$', '%', '&', '\'', '(', ')', '*', '+',
           ',', '-', '.', '/', ':', ';', '<', '=', '>', '?', '@',
           '[', '\\', ']', '^', '_', '`', '{', '|', '}', '|', '~' ]
       end
 
-      def self.unicode_punctuation
+      def unicode_punctuation_chars
         @@unicode_punctuation ||= begin
           classes = ["Pc", "Pd", "Pe", "Pf", "Pi", "Po", "Ps"]
           char_codes = UnicodeData::CharClass[*classes]
@@ -17,7 +18,7 @@ class CommonMark
         end
       end
 
-      def self.unicode_space
+      def unicode_space_chars
         @@unicode_space ||= begin
           char_codes = UnicodeData::CharClass["Zs"]
           char_codes.map { |ch| ch.to_i(16).chr('utf-8') }
@@ -51,15 +52,15 @@ class CommonMark
       rule(:non_space) { space.absent? >> any }
 
       rule(:ascii_punctuation) do
-        self.class.ascii_punctuation.map { |s| str(s) }.reduce(:|)
+        ascii_punctuation_chars.map { |s| str(s) }.reduce(:|)
       end
 
       rule(:unicode_punctuation) do
-        self.class.unicode_punctuation.map { |ch| str(ch) }.reduce(:|)
+        unicode_punctuation_chars.map { |ch| str(ch) }.reduce(:|)
       end
 
       rule(:unicode_space) do
-        self.class.unicode_space.map { |ch| str(ch) }.reduce(:|)
+        unicode_space_chars.map { |ch| str(ch) }.reduce(:|)
       end
 
       rule(:punctuation) { ascii_punctuation | unicode_punctuation }
