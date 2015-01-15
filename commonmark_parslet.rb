@@ -5,6 +5,8 @@ require './unicode_data'
 
 require 'byebug'
 
+CodeClimate::TestReporter.start
+
 class CommonMark
   class Parser
     class Preliminaries < Parslet::Parser
