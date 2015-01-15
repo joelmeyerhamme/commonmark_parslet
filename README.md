@@ -1,9 +1,4 @@
-- [![Code Climate](https://img.shields.io/codeclimate/github/joelmeyerhamme/commonmark_parslet.svg?style=flat)](https://codeclimate.com/github/joelmeyerhamme/commonmark_parslet)
-- [![Code Climate](https://img.shields.io/codeclimate/coverage/github/joelmeyerhamme/commonmark_parslet.svg?style=flat)](https://codeclimate.com/github/joelmeyerhamme/commonmark_parslet)
-- [![Gem](https://img.shields.io/gem/v/commonmark_parslet.svg?style=flat)](https://rubygems.org/gems/commonmark_parslet)
-- [![Travis](https://img.shields.io/travis/joelmeyerhamme/commonmark_parslet.svg?style=flat)](https://travis-ci.org/joelmeyerhamme/commonmark_parslet)
-- [![Gemnasium](https://img.shields.io/gemnasium/joelmeyerhamme/commonmark_parslet.svg?style=flat)](https://gemnasium.com/joelmeyerhamme/commonmark_parslet)
-- [![Coveralls](https://img.shields.io/coveralls/joelmeyerhamme/commonmark_parslet.svg?style=flat)](https://coveralls.io/r/joelmeyerhamme/commonmark_parslet)
+[![Code Climate](https://img.shields.io/codeclimate/github/joelmeyerhamme/commonmark_parslet.svg?style=flat)](https://codeclimate.com/github/joelmeyerhamme/commonmark_parslet) [![Code Climate](https://img.shields.io/codeclimate/coverage/github/joelmeyerhamme/commonmark_parslet.svg?style=flat)](https://codeclimate.com/github/joelmeyerhamme/commonmark_parslet) [![Gem](https://img.shields.io/gem/v/commonmark_parslet.svg?style=flat)](https://rubygems.org/gems/commonmark_parslet) [![Travis](https://img.shields.io/travis/joelmeyerhamme/commonmark_parslet.svg?style=flat)](https://travis-ci.org/joelmeyerhamme/commonmark_parslet) [![Gemnasium](https://img.shields.io/gemnasium/joelmeyerhamme/commonmark_parslet.svg?style=flat)](https://gemnasium.com/joelmeyerhamme/commonmark_parslet) [![Coveralls](https://img.shields.io/coveralls/joelmeyerhamme/commonmark_parslet.svg?style=flat)](https://coveralls.io/r/joelmeyerhamme/commonmark_parslet)
 
 [Parslet](http://kschiess.github.com/parslet), [CommonMark](http://commonmark.org/)
 
