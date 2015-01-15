@@ -1,4 +1,9 @@
-[![Code Climate](https://codeclimate.com/github/joelmeyerhamme/commonmark_parslet/badges/gpa.svg)](https://codeclimate.com/github/joelmeyerhamme/commonmark_parslet) [![Test Coverage](https://codeclimate.com/github/joelmeyerhamme/commonmark_parslet/badges/coverage.svg)](https://codeclimate.com/github/joelmeyerhamme/commonmark_parslet) [![Gem Version](https://badge.fury.io/rb/commonmark_parslet.png)](https://rubygems.org/gems/commonmark_parslet) [![Build Status](https://travis-ci.org/joelmeyerhamme/commonmark_parslet.png)](https://travis-ci.org/joelmeyerhamme/commonmark_parslet) [![Dependency Status](https://gemnasium.com/joelmeyerhamme/commonmark_parslet.png)](https://gemnasium.com/joelmeyerhamme/commonmark_parslet) [![Coverage Status](https://coveralls.io/repos/joelmeyerhamme/commonmark_parslet/badge.svg)](https://coveralls.io/r/joelmeyerhamme/commonmark_parslet)
+- [![Code Climate](https://img.shields.io/codeclimate/github/joelmeyerhamme/commonmark_parslet.svg?style=flat)](https://codeclimate.com/github/joelmeyerhamme/commonmark_parslet)
+- [![Code Climate](https://img.shields.io/codeclimate/coverage/github/joelmeyerhamme/commonmark_parslet.svg?style=flat)](https://codeclimate.com/github/joelmeyerhamme/commonmark_parslet)
+- [![Gem](https://img.shields.io/gem/v/commonmark_parslet.svg?style=flat)](https://rubygems.org/gems/commonmark_parslet)
+- [![Travis](https://img.shields.io/travis/joelmeyerhamme/commonmark_parslet.svg?style=flat)](https://travis-ci.org/joelmeyerhamme/commonmark_parslet)
+- [![Gemnasium](https://img.shields.io/gemnasium/joelmeyerhamme/commonmark_parslet.svg?style=flat)](https://gemnasium.com/joelmeyerhamme/commonmark_parslet)
+- [![Coveralls](https://img.shields.io/coveralls/joelmeyerhamme/commonmark_parslet.svg?style=flat)](https://coveralls.io/r/joelmeyerhamme/commonmark_parslet)
 
 [Parslet](http://kschiess.github.com/parslet), [CommonMark](http://commonmark.org/)
 
