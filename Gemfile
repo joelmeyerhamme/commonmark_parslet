@@ -1,13 +1,14 @@
 source 'https://rubygems.org'
 
-gem "parslet"
+gem 'parslet'
 
 group 'development' do
-  gem "byebug"
+  gem 'byebug'
+  gem 'travis'
 end
 
-group "test" do
-  gem "rspec"
-  gem "rake"
-  gem "codeclimate-test-reporter", require: nil
+group 'test' do
+  gem 'rspec'
+  gem 'rake'
+  gem 'codeclimate-test-reporter', require: nil
 end
