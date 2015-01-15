@@ -73,10 +73,6 @@ end
 
 
 describe CommonMark::Parser::Preliminaries do
-  it "should parse anything at all" do
-    is_expected.to parse(".")
-  end
-
   it "should parse whitespace" do
     is_expected.to parse("\u0009")
     is_expected.to parse("\u0020")
