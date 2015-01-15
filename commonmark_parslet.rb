@@ -68,7 +68,7 @@ end
 
 describe CommonMark::Parser::Preliminaries do
   subject do
-    described_class.new.character
+    described_class.new
   end
 
   it "should parse anything at all" do
