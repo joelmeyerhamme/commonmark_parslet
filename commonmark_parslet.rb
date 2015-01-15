@@ -1,10 +1,12 @@
-require 'parslet'
-require 'rspec'
+require 'rubygems'
+require 'bundler'
+
+Bundler.require(:default, :test)
+
 require 'parslet/rig/rspec'
 require './unicode_data'
 
-require 'byebug'
-
+require "codeclimate-test-reporter"
 CodeClimate::TestReporter.start
 
 class CommonMark
