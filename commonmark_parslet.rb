@@ -39,11 +39,11 @@ class CommonMark
         whitespace_character.repeat(1)
       end
 
-      rule(:tab)             { str("\u0009") }
-      rule(:space)           { str("\u0020") }
-      rule(:carriage_return) { str("\u000d") }
-      rule(:bom)             { str("\u0000") }
-      rule(:newline)         { str("\u000a") }
+      rule(:tab)             { str("\t") }
+      rule(:space)           { str(" ")  }
+      rule(:carriage_return) { str("\r") }
+      rule(:null)            { str("\0") }
+      rule(:newline)         { str("\n") }
       rule(:blank_line)      { whitespace >> eol }
 
       rule(:non_space) { space.absent? >> any }
@@ -74,11 +74,14 @@ end
 
 describe CommonMark::Parser::Preliminaries do
   it "should parse whitespace" do
-    is_expected.to parse("\u0009")
-    is_expected.to parse("\u0020")
-    is_expected.to parse("\u000d")
-    is_expected.to parse("\u0000")
-    is_expected.to parse("\u000a")
+    CommonMark::Parser::Preliminaries::ASCII_PUNCTUATION
+    CommonMark::Parser::Preliminaries::UNICODE_PUNCTUATION
+    CommonMark::Parser::Preliminaries::UNICODE_SPACE
+    is_expected.to parse("\t")
+    is_expected.to parse(" ")
+    is_expected.to parse("\r")
+    is_expected.to parse("\0")
+    is_expected.to parse("\n")
   end
 
   it "should parse ascii punctuation" do
