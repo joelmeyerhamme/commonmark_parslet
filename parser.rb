@@ -3,25 +3,23 @@ require './commonmark_parslet'
 class CommonMark
   class Parser
     class Preliminaries < Parslet::Parser
-      ASCII_PUNCTUATION ||= [
+      ASCII_PUNCTUATION = [
         '!', '"', '#', '$', '%', '&', '\'', '(', ')', '*', '+',
         ',', '-', '.', '/', ':', ';', '<', '=', '>', '?', '@',
         '[', '\\', ']', '^', '_', '`', '{', '|', '}', '|', '~']
 
-      UNICODE_PUNCTUATION ||= UnicodeData::CharClass[
-        "Pc", "Pd", "Pe", "Pf", "Pi", "Po", "Ps"]
-
-      UNICODE_SPACE ||= UnicodeData::CharClass["Zs"]
-
       def self.unicode_punctuation
-        @@unicode_punctuation ||= UNICODE_PUNCTUATION.map do |ch|
-          ch.to_i(16).chr('utf-8')
+        @@unicode_punctuation ||= begin
+          classes = ["Pc", "Pd", "Pe", "Pf", "Pi", "Po", "Ps"]
+          char_codes = UnicodeData::CharClass[*classes]
+          char_codes.map { |ch| ch.to_i(16).chr('utf-8') }
         end
       end
 
       def self.unicode_space
-        @@unicode_space ||= UNICODE_SPACE.map do |ch|
-          ch.to_i(16).chr('utf-8')
+        @@unicode_space ||= begin
+          char_codes = UnicodeData::CharClass["Zs"]
+          char_codes.map { |ch| ch.to_i(16).chr('utf-8') }
         end
       end
 
