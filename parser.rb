@@ -1,14 +1,12 @@
-require './commonmark_parslet'
-
 class CommonMark::Parser::Preliminaries < Parslet::Parser
-  def ascii_punctuation_chars
+  def self.ascii_punctuation_chars
     @@ascii_punctuation ||= [
       '!', '"', '#', '$', '%', '&', '\'', '(', ')', '*', '+',
       ',', '-', '.', '/', ':', ';', '<', '=', '>', '?', '@',
       '[', '\\', ']', '^', '_', '`', '{', '|', '}', '|', '~' ]
   end
 
-  def unicode_punctuation_chars
+  def self.unicode_punctuation_chars
     @@unicode_punctuation ||= begin
       classes = ["Pc", "Pd", "Pe", "Pf", "Pi", "Po", "Ps"]
       char_codes = UnicodeData::CharClass[*classes]
@@ -16,7 +14,7 @@ class CommonMark::Parser::Preliminaries < Parslet::Parser
     end
   end
 
-  def unicode_space_chars
+  def self.unicode_space_chars
     @@unicode_space ||= begin
       char_codes = UnicodeData::CharClass["Zs"]
       char_codes.map { |ch| ch.to_i(16).chr('utf-8') }
@@ -25,40 +23,64 @@ class CommonMark::Parser::Preliminaries < Parslet::Parser
 
   root(:line)
 
-  rule(:line) { character.repeat }
-  rule(:character) { whitespace | punctuation | any }
+  def line
+    character.repeat
+  end
 
-  rule(:whitespace_character) do
+  def character
+    whitespace | punctuation | any
+  end
+
+  def whitespace_character
     space | unicode_space | tab | carriage_return | newline
   end
 
-  rule(:eol) do
+  def eol
     carriage_return >> newline | newline | carriage_return
   end
 
-  rule(:whitespace) do
+  def whitespace
     whitespace_character.repeat(1)
   end
 
-  rule(:tab)             { str("\t") }
-  rule(:space)           { str(" ")  }
-  rule(:carriage_return) { str("\r") }
-  rule(:null)            { str("\0") }
-  rule(:newline)         { str("\n") }
-  rule(:blank_line)      { whitespace >> eol }
-
-  rule(:non_space) { space.absent? >> any }
-
-  rule(:ascii_punctuation) do
-    ascii_punctuation_chars.map { |s| str(s) }.reduce(:|)
+  def tab
+    str("\t")
   end
 
-  rule(:unicode_punctuation) do
-    unicode_punctuation_chars.map { |ch| str(ch) }.reduce(:|)
+  def space
+    str(" ")
   end
 
-  rule(:unicode_space) do
-    unicode_space_chars.map { |ch| str(ch) }.reduce(:|)
+  def carriage_return
+    str("\r")
+  end
+
+  def null
+    str("\0")
+  end
+
+  def newline
+    str("\n")
+  end
+
+  def blank_line
+    whitespace >> eol
+  end
+
+  def non_space
+    space.absent? >> any
+  end
+
+  def ascii_punctuation
+    self.class.ascii_punctuation_chars.map { |s| str(s) }.reduce(:|)
+  end
+
+  def unicode_punctuation
+    self.class.unicode_punctuation_chars.map { |ch| str(ch) }.reduce(:|)
+  end
+
+  def unicode_space
+    self.class.unicode_space_chars.map { |ch| str(ch) }.reduce(:|)
   end
 
   rule(:punctuation) { ascii_punctuation | unicode_punctuation }
