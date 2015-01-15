@@ -8,6 +8,20 @@ require 'byebug'
 class CommonMark
   class Parser
     class Preliminaries < Parslet::Parser
+      ASCII_PUNCTUATION ||= [
+        '!', '"', '#', '$', '%', '&', '\'', '(', ')', '*', '+',
+        ',', '-', '.', '/', ':', ';', '<', '=', '>', '?', '@',
+        '[', '\\', ']', '^', '_', '`', '{', '|', '}', '|', '~']
+
+      UNICODE_PUNCTUATION ||= UnicodeData::CharClass[
+        "Pc", "Pd", "Pe", "Pf", "Pi", "Po", "Ps"].map do |ch|
+        ch.to_i(16).chr('utf-8')
+      end
+
+      UNICODE_SPACE ||= UnicodeData::CharClass["Zs"].map do |ch|
+        ch.to_i(16).chr('utf-8')
+      end
+
       root(:line)
 
       rule(:line) { character.repeat }
@@ -35,25 +49,16 @@ class CommonMark
       rule(:non_space) { space.absent? >> any }
 
       rule(:ascii_punctuation) do
-        str('!')  | str('"') | str('#') | str('$') | str('%') | str('&')  |
-        str('\'') | str('(') | str(')') | str('*') | str('+') | str(',')  |
-        str('-')  | str('.') | str('/') | str(':') | str(';') | str('<')  |
-        str('=')  | str('>') | str('?') | str('@') | str('[') | str('\\') |
-        str(']')  | str('^') | str('_') | str('`') | str('{') | str('|')  |
-        str('}')  | str('|') | str('~')
+        ASCII_PUNCTUATION.map { |s| str(s) }.reduce(:|)
       end
 
       rule(:unicode_punctuation) do
-        UnicodeData::CharClass["Pc", "Pd", "Pe", "Pf", "Pi", "Po", "Ps"].
-          map do |ch|
-            str(ch.to_i(16).chr('utf-8'))
-          end.reduce(:|)
+        UNICODE_PUNCTUATION.
+          map { |ch| str(ch) }.reduce(:|)
       end
 
       rule(:unicode_space) do
-        UnicodeData::CharClass["Zs"].map do |ch|
-          str(ch.to_i(16).chr('utf-8'))
-        end.reduce(:|)
+        UNICODE_SPACE.map { |ch| str(ch) }.reduce(:|)
       end
 
       rule(:punctuation) { ascii_punctuation | unicode_punctuation }
@@ -68,62 +73,66 @@ end
 
 
 describe CommonMark::Parser::Preliminaries do
-  subject do
-    described_class.new
-  end
-
   it "should parse anything at all" do
-    expect(subject).to parse(".")
+    is_expected.to parse(".")
   end
 
-  it "should parse whitespace" # do
-    # pending "freeze"
-    # expect(subject).to parse("\u0009")
-    # expect(subject).to parse("\u0020")
-    # expect(subject).to parse("\u000d")
-    # expect(subject).to parse("\u0000")
-    # expect(subject).to parse("\u000a")
-  # end
+  it "should parse whitespace" do
+    is_expected.to parse("\u0009")
+    is_expected.to parse("\u0020")
+    is_expected.to parse("\u000d")
+    is_expected.to parse("\u0000")
+    is_expected.to parse("\u000a")
+  end
 
-  it "should parse ascii punctuation" # do
-    # pending "freeze"
-    # expect(subject).to parse('!')
-    # expect(subject).to parse('"')
-    # expect(subject).to parse('#')
-    # expect(subject).to parse('$')
-    # expect(subject).to parse('%')
-    # expect(subject).to parse('&')
-    # expect(subject).to parse('\'')
-    # expect(subject).to parse('(')
-    # expect(subject).to parse(')')
-    # expect(subject).to parse('*')
-    # expect(subject).to parse('+')
-    # expect(subject).to parse(',')
-    # expect(subject).to parse('-')
-    # expect(subject).to parse('.')
-    # expect(subject).to parse('/')
-    # expect(subject).to parse(':')
-    # expect(subject).to parse(';')
-    # expect(subject).to parse('<')
-    # expect(subject).to parse('=')
-    # expect(subject).to parse('>')
-    # expect(subject).to parse('?')
-    # expect(subject).to parse('@')
-    # expect(subject).to parse('[')
-    # expect(subject).to parse('\\')
-    # expect(subject).to parse(']')
-    # expect(subject).to parse('^')
-    # expect(subject).to parse('_')
-    # expect(subject).to parse('`')
-    # expect(subject).to parse('{')
-    # expect(subject).to parse('|')
-    # expect(subject).to parse('}')
-    # expect(subject).to parse('|')
-    # expect(subject).to parse('~')
-  # end
+  it "should parse ascii punctuation" do
+    is_expected.to parse('!')
+    is_expected.to parse('"')
+    is_expected.to parse('#')
+    is_expected.to parse('$')
+    is_expected.to parse('%')
+    is_expected.to parse('&')
+    is_expected.to parse('\'')
+    is_expected.to parse('(')
+    is_expected.to parse(')')
+    is_expected.to parse('*')
+    is_expected.to parse('+')
+    is_expected.to parse(',')
+    is_expected.to parse('-')
+    is_expected.to parse('.')
+    is_expected.to parse('/')
+    is_expected.to parse(':')
+    is_expected.to parse(';')
+    is_expected.to parse('<')
+    is_expected.to parse('=')
+    is_expected.to parse('>')
+    is_expected.to parse('?')
+    is_expected.to parse('@')
+    is_expected.to parse('[')
+    is_expected.to parse('\\')
+    is_expected.to parse(']')
+    is_expected.to parse('^')
+    is_expected.to parse('_')
+    is_expected.to parse('`')
+    is_expected.to parse('{')
+    is_expected.to parse('|')
+    is_expected.to parse('}')
+    is_expected.to parse('|')
+    is_expected.to parse('~')
+  end
 
-  it "should parse unicode whitespace"
-  it "should parse unicode punctuation"
+  it "should parse unicode whitespace" do
+    UnicodeData::CharClass["Zs"].each do |ch|
+      is_expected.to parse(ch.to_i(16).chr('utf-8'))
+    end
+  end
+
+  it "should parse unicode punctuation" do
+    UnicodeData::CharClass["Pc", "Pd", "Pe", "Pf", "Pi", "Po", "Ps"].
+      each do |ch|
+        is_expected.to parse(ch.to_i(16).chr('utf-8'))
+      end
+  end
 end
 
 describe CommonMark::Transform::HTML do
