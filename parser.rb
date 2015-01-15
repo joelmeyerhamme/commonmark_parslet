@@ -7,8 +7,10 @@ class CommonMark
         '!', '"', '#', '$', '%', '&', '\'', '(', ')', '*', '+',
         ',', '-', '.', '/', ':', ';', '<', '=', '>', '?', '@',
         '[', '\\', ']', '^', '_', '`', '{', '|', '}', '|', '~']
+
       UNICODE_PUNCTUATION ||= UnicodeData::CharClass[
         "Pc", "Pd", "Pe", "Pf", "Pi", "Po", "Ps"]
+
       UNICODE_SPACE ||= UnicodeData::CharClass["Zs"]
 
       def self.unicode_punctuation
