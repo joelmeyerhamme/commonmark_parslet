@@ -3,11 +3,15 @@ require 'bundler'
 
 Bundler.require(:default, :test)
 
-require 'parslet/rig/rspec'
 require './unicode_data'
 
+# spec
+require 'parslet/rig/rspec'
 require "codeclimate-test-reporter"
+require 'coveralls'
 CodeClimate::TestReporter.start
+Coveralls.wear!
+
 
 class CommonMark
   class Parser
