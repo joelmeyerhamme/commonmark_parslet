@@ -1,6 +1,6 @@
 Bundler.require(:default, :test)
 require 'parslet/rig/rspec'
-CodeClimate::TestReporter.start
 Coveralls.wear!
+CodeClimate::TestReporter.start
 require './commonmark_parslet'
 
