@@ -11,4 +11,5 @@ end
 require './lib/parser/preliminaries'
 require './lib/parser/leaf_block'
 require './lib/parser/leaf_block/hrule'
+require './lib/parser/leaf_block/atx_header'
 require './lib/transform/html'
