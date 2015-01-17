@@ -1,28 +1,23 @@
 class CommonMark::Parser::LeafBlock::Hrule < Parslet::Parser
   root(:hrule_line)
 
-  rule(:hrule_line)
-  def hrule_line
+  def hrule_line_def
     space_character.repeat(0,3) >> (hrule) >> whitespace.maybe
-  end
+  end; rule(:hrule_line) { hrule_line_def }
 
-  rule(:hrule)
-  def hrule
+  def hrule_def
     hrule_char("*") | hrule_char("-") | hrule_char("_")
-  end
+  end; rule(:hrule) { hrule_def }
 
-  rule(:hrule_char)
   def hrule_char(char)
     (str(char) >> whitespace.maybe).repeat(3)
   end
 
-  rule(:whitespace)
-  def whitespace
+  def whitespace_def
     CommonMark::Parser::Preliminaries.new.whitespace
-  end
+  end; rule(:whitespace) { whitespace_def }
 
-  rule(:space_character)
-  def space_character
+  def space_character_def
     CommonMark::Parser::Preliminaries.new.space_character
-  end
+  end; rule(:space_character) { space_character_def }
 end
