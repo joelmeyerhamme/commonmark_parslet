@@ -26,4 +26,12 @@ describe CommonMark::Parser::Preliminaries do
       is_expected.to parse(ch)
     end
   end
+
+  describe "tab expansion" do
+    it "should expand inline tabs to 4 chars" do
+      pending "put tabbing monstly into renderers?"
+      expect(subject.parse("\tfoo\tbaz\t\tbim")).to eq("<pre><code>foo baz     bim\n</code></pre>")
+      expect(subject.parse("    a\ta\n    ὐ\ta")).to eq("<pre><code>a   a\nὐ   a\n</code></pre>")
+    end
+  end
 end

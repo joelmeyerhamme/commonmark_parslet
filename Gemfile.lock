@@ -8,8 +8,6 @@ GEM
       columnize (~> 0.8)
       debugger-linecache (~> 1.2)
       slop (~> 3.6)
-    codeclimate-test-reporter (0.4.5)
-      simplecov (>= 0.7.1, < 1.0.0)
     coderay (1.1.0)
     columnize (0.9.0)
     coveralls (0.7.2)
@@ -98,7 +96,6 @@ PLATFORMS
 
 DEPENDENCIES
   byebug
-  codeclimate-test-reporter
   coveralls
   parslet
   rspec
