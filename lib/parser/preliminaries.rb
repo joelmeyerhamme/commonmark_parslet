@@ -25,69 +25,70 @@ class CommonMark::Parser::Preliminaries < Parslet::Parser
 
   def line_def
     blank_line | character.repeat >> eol
-  end; rule(:line) { line_def }
+  end
+  rule(:line) { line_def }
 
-  def character_def
+  def character
     whitespace | punctuation | null | any
-  end; rule(:character) { character_def }
+  end
 
-  def whitespace_character_def
+  def whitespace_character
     tab | space_character
-  end; rule(:whitespace_character) { whitespace_character_def }
+  end
 
-  def space_character_def
+  def space_character
     space | unicode_space
-  end; rule(:space_character) { space_character_def }
+  end
 
-  def eol_def
+  def eol
     carriage_return >> newline | newline | carriage_return | any.absent?
-  end; rule(:eol) { eol_def }
+  end
 
-  def whitespace_def
+  def whitespace
     whitespace_character.repeat(1)
-  end; rule(:whitespace) { whitespace_def }
+  end
 
-  def tab_def
+  def tab
     str("\t") | space_character.repeat(4)
-  end; rule(:tab) { tab_def }
+  end
 
-  def space_def
+  def space
     str(" ")
-  end; rule(:space) { space_def }
+  end
 
-  def carriage_return_def
+  def carriage_return
     str("\r")
-  end; rule(:carriage_return) { carriage_return_def }
+  end
 
-  def null_def
+  def null
     str("\0")
-  end; rule(:null) { null_def }
+  end
 
-  def newline_def
+  def newline
     str("\n")
-  end; rule(:newline) { newline_def }
+  end
 
-  def blank_line_def
+  def blank_line
     whitespace.maybe >> eol
-  end; rule(:blank_line) { blank_line_def }
+  end
 
-  # def non_space_def
+  # def non_space
   #   space.absent? >> any
-  # end; rule(:non_space) { non_space_def }
+  # end
 
-  def ascii_punctuation_def
+  def ascii_punctuation
     self.class.ascii_punctuation_chars.map { |s| str(s) }.reduce(:|)
-  end; rule(:ascii_punctuation) { ascii_punctuation_def }
+  end
 
-  def unicode_punctuation_def
+  def unicode_punctuation
     self.class.unicode_punctuation_chars.map { |ch| str(ch) }.reduce(:|)
-  end; rule(:unicode_punctuation) { unicode_punctuation_def }
+  end
 
-  def unicode_space_def
+  def unicode_space
     self.class.unicode_space_chars.map { |ch| str(ch) }.reduce(:|)
-  end; rule(:unicode_space) { unicode_space_def }
+  end
 
-  def punctuation_def
+  def punctuation
     ascii_punctuation | unicode_punctuation
-  end; rule(:punctuation) { punctuation_def }
+  end
 end
