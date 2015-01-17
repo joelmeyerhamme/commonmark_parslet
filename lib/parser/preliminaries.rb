@@ -23,88 +23,71 @@ class CommonMark::Parser::Preliminaries < Parslet::Parser
 
   root(:line)
 
-  rule(:line)
-  def line
+  def line_def
     blank_line | character.repeat >> eol
-  end
+  end; rule(:line) { line_def }
 
-  rule(:character)
-  def character
+  def character_def
     whitespace | punctuation | null | any
-  end
+  end; rule(:character) { character_def }
 
-  rule(:whitespace_character)
-  def whitespace_character
+  def whitespace_character_def
     tab | space_character
-  end
+  end; rule(:whitespace_character) { whitespace_character_def }
 
-  rule(:space_character)
-  def space_character
+  def space_character_def
     space | unicode_space
-  end
+  end; rule(:space_character) { space_character_def }
 
-  rule(:eol)
-  def eol
+  def eol_def
     carriage_return >> newline | newline | carriage_return | any.absent?
-  end
+  end; rule(:eol) { eol_def }
 
-  rule(:whitespace)
-  def whitespace
+  def whitespace_def
     whitespace_character.repeat(1)
-  end
+  end; rule(:whitespace) { whitespace_def }
 
-  rule(:tab)
-  def tab
+  def tab_def
     str("\t") | space_character.repeat(4)
-  end
+  end; rule(:tab) { tab_def }
 
-  rule(:space)
-  def space
+  def space_def
     str(" ")
-  end
+  end; rule(:space) { space_def }
 
-  rule(:carriage_return)
-  def carriage_return
+  def carriage_return_def
     str("\r")
-  end
+  end; rule(:carriage_return) { carriage_return_def }
 
-  rule(:null)
-  def null
+  def null_def
     str("\0")
-  end
+  end; rule(:null) { null_def }
 
-  rule(:newline)
-  def newline
+  def newline_def
     str("\n")
-  end
+  end; rule(:newline) { newline_def }
 
-  rule(:blank_line)
-  def blank_line
+  def blank_line_def
     whitespace.maybe >> eol
-  end
+  end; rule(:blank_line) { blank_line_def }
 
-  # # rule(:non_space)
-  # def non_space
+  # def non_space_def
   #   space.absent? >> any
-  # end
+  # end; rule(:non_space) { non_space_def }
 
-  rule(:ascii_punctuation)
-  def ascii_punctuation
+  def ascii_punctuation_def
     self.class.ascii_punctuation_chars.map { |s| str(s) }.reduce(:|)
-  end
+  end; rule(:ascii_punctuation) { ascii_punctuation_def }
 
-  rule(:unicode_punctuation)
-  def unicode_punctuation
+  def unicode_punctuation_def
     self.class.unicode_punctuation_chars.map { |ch| str(ch) }.reduce(:|)
-  end
+  end; rule(:unicode_punctuation) { unicode_punctuation_def }
 
-  rule(:unicode_space)
-  def unicode_space
+  def unicode_space_def
     self.class.unicode_space_chars.map { |ch| str(ch) }.reduce(:|)
-  end
+  end; rule(:unicode_space) { unicode_space_def }
 
-  rule(:punctuation)
-  def punctuation
+  def punctuation_def
     ascii_punctuation | unicode_punctuation
-  end
+  end; rule(:punctuation) { punctuation_def }
 end
