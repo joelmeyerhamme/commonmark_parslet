@@ -21,74 +21,73 @@ class CommonMark::Parser::Preliminaries < Parslet::Parser
     end
   end
 
-  root(:line)
+  root :line
 
-  def line_def
+  rule :line do
     blank_line | character.repeat >> eol
   end
-  rule(:line) { line_def }
 
-  def character
-    whitespace | punctuation | null | any
+  rule :character do
+    whitespace | punctuation | null | (eol.absent? >> any)
   end
 
-  def whitespace_character
+  rule :whitespace_character do
     tab | space_character
   end
 
-  def space_character
+  rule :space_character do
     space | unicode_space
   end
 
-  def eol
+  rule :eol do
     carriage_return >> newline | newline | carriage_return | any.absent?
   end
 
-  def whitespace
+  rule :whitespace do
     whitespace_character.repeat(1)
   end
 
-  def tab
+  rule :tab do
     str("\t") | space_character.repeat(4)
   end
 
-  def space
+  rule :space do
     str(" ")
   end
 
-  def carriage_return
+  rule :carriage_return do
     str("\r")
   end
 
-  def null
+  rule :null do
     str("\0")
   end
 
-  def newline
+  rule :newline do
     str("\n")
   end
 
-  def blank_line
+  rule :blank_line do
     whitespace.maybe >> eol
   end
 
-  # def non_space
+  # rule :non_space do
   #   space.absent? >> any
   # end
 
-  def ascii_punctuation
+  rule :ascii_punctuation do
     self.class.ascii_punctuation_chars.map { |s| str(s) }.reduce(:|)
   end
 
-  def unicode_punctuation
+  rule :unicode_punctuation do
     self.class.unicode_punctuation_chars.map { |ch| str(ch) }.reduce(:|)
   end
 
-  def unicode_space
+  rule :unicode_space do
     self.class.unicode_space_chars.map { |ch| str(ch) }.reduce(:|)
   end
 
-  def punctuation
+  rule :punctuation do
     ascii_punctuation | unicode_punctuation
   end
 end
