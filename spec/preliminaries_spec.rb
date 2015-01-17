@@ -27,6 +27,11 @@ describe CommonMark::Parser::Preliminaries do
     end
   end
 
+  it "should strip null characters" do
+    pending "omit naming in tree construction"
+    expect(subject.parse("\0")).to eq("")
+  end
+
   describe "tab expansion" do
     it "should expand inline tabs to 4 chars" do
       pending "put tabbing monstly into renderers?"

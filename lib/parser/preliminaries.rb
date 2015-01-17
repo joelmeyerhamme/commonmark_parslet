@@ -25,12 +25,12 @@ class CommonMark::Parser::Preliminaries < Parslet::Parser
 
   # rule(:line)
   def line
-    character.repeat
+    blank_line | character.repeat >> eol
   end
 
   # rule(:character)
   def character
-    whitespace | punctuation | any
+    whitespace | punctuation | null | any
   end
 
   # rule(:whitespace_character)
@@ -40,7 +40,7 @@ class CommonMark::Parser::Preliminaries < Parslet::Parser
 
   # rule(:eol)
   def eol
-    carriage_return >> newline | newline | carriage_return
+    carriage_return >> newline | newline | carriage_return | any.absent?
   end
 
   # rule(:whitespace)
@@ -78,10 +78,10 @@ class CommonMark::Parser::Preliminaries < Parslet::Parser
     whitespace >> eol
   end
 
-  # rule(:non_space)
-  def non_space
-    space.absent? >> any
-  end
+  # # rule(:non_space)
+  # def non_space
+  #   space.absent? >> any
+  # end
 
   # rule(:ascii_punctuation)
   def ascii_punctuation
