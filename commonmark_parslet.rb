@@ -1,13 +1,12 @@
 require 'rubygems'
 require 'bundler'
 Bundler.require(:default)
-require './unicode_data'
+require './unicode_data/char_class'
 
-class CommonMark
+module CommonMark
+  class Parser < Parslet::Parser
+  end
 end
 
-class CommonMark::Parser < Parslet::Parser
-end
-
-require './parser'
-require './transform'
+require './parser/preliminaries'
+require './transform/html'

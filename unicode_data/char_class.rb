@@ -1,7 +1,7 @@
 require 'csv'
 
 module UnicodeData
-  DATA ||= CSV.parse(File.read("./unicode_data.csv"), {:col_sep => ';'})
+  DATA ||= CSV.parse(File.read("./unicode_data/unicode_data.csv"), {:col_sep => ';'})
 
   module CharClass
     CLASSES ||= DATA.group_by { |char| char[2] }
