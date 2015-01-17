@@ -6,9 +6,12 @@ describe CommonMark::Parser::Preliminaries do
     it "should parse whitespace" do
       is_expected.to parse(" ")
       is_expected.to parse("\t")
-      is_expected.to parse("\r")
       is_expected.to parse("\0")
-      is_expected.to parse("\n")
+    end
+
+    it "should not parse vertical whitespace" do
+      is_expected.not_to parse("\r")
+      is_expected.not_to parse("\n")
     end
 
     it "should parse ascii punctuation" do
