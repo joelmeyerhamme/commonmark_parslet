@@ -3,5 +3,6 @@ class CommonMark::Parser::LeafBlock < Parslet::Parser
 
   def leaf_block_def
     CommonMark::Parser::LeafBlock::Hrule.new
-  end; rule(:leaf_block) { leaf_block_def }
+  end
+  rule(:leaf_block) { leaf_block_def }
 end
