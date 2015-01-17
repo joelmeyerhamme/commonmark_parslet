@@ -99,4 +99,5 @@ DEPENDENCIES
   coveralls
   parslet
   rspec
+  simplecov
   travis
