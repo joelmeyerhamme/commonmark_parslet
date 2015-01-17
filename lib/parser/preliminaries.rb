@@ -35,7 +35,12 @@ class CommonMark::Parser::Preliminaries < Parslet::Parser
 
   # rule(:whitespace_character)
   def whitespace_character
-    space | unicode_space | tab | carriage_return | newline
+    tab | space_character
+  end
+
+  #rule(:space_character)
+  def space_character
+    space | unicode_space
   end
 
   # rule(:eol)
@@ -50,7 +55,7 @@ class CommonMark::Parser::Preliminaries < Parslet::Parser
 
   # rule(:tab)
   def tab
-    str("\t")
+    str("\t") | space_character.repeat(4)
   end
 
   # rule(:space)
@@ -75,7 +80,7 @@ class CommonMark::Parser::Preliminaries < Parslet::Parser
 
   # rule(:blank_line)
   def blank_line
-    whitespace >> eol
+    whitespace.maybe >> eol
   end
 
   # # rule(:non_space)

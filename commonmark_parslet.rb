@@ -9,4 +9,5 @@ module CommonMark
 end
 
 require './lib/parser/preliminaries'
+require './lib/parser/leaf_block'
 require './lib/transform/html'
