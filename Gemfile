@@ -3,8 +3,8 @@ source 'https://rubygems.org'
 gem 'parslet'
 
 group 'develop' do
-  gem 'byebug'
   gem 'travis'
+  gem 'byebug'
 end
 
 group 'test' do
