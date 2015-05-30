@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'parslet'
+gem 'parslet' , :git => 'https://github.com/NigelThorne/parslet.git'
 
 group 'develop' do
   gem 'travis'
