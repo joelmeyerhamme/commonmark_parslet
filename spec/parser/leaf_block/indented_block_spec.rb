@@ -6,7 +6,6 @@ describe CommonMark::Parser::LeafBlock::IndentedBlock do
   end
 
   it "should parse indented blocks with blank lines" do
-    pending "how to parse multiple internal blank lines without unbroken recursion?"
     is_expected.to parse("    chunk1\n\n    chunk2\n\n\n    chunk3")
   end
 
@@ -43,7 +42,6 @@ describe CommonMark::Parser::LeafBlock::IndentedBlock do
   end
 
   it "should consume multiple chunks" do
-    pending "how to parse multiple internal blank lines without unbroken recursion?"
     is_expected.to parse \
       "    chunk1\n\n\tchunk2\n  \n \n \n    chunk3"
   end
