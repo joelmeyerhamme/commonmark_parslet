@@ -8,7 +8,7 @@
 [![tag](https://img.shields.io/github/tag/joelmeyerhamme/commonmark_parslet.svg?style=flat)](https://github.com/joelmeyerhamme/commonmark_parslet/tags)
 [![release](https://img.shields.io/github/release/joelmeyerhamme/commonmark_parslet.svg?style=flat)](https://github.com/joelmeyerhamme/commonmark_parslet/releases)
 [![gem](https://img.shields.io/gem/v/commonmark_parslet.svg?style=flat)](https://rubygems.org/gems/commonmark_parslet)
-[![license](https://img.shields.io/:license-mit-blue.svg?style=flat)](http://mit-license.org)
+[![license](https://img.shields.io/badge/license-cc%20%20by-brightgreen.svg)](http://creativecommons.org/licenses/by/4.0/)
 [![badges](https://img.shields.io/:badges-10-blue.svg?style=flat)](https://github.com/badges/badgerbadgerbadger)
 
 [Markdown](https://daringfireball.net/projects/markdown/) parser, in [Parslet](https://kschiess.github.com/parslet), compliant to [CommonMark](http://commonmark.org/).

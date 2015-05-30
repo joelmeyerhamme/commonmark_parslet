@@ -1,12 +1,12 @@
 Gem::Specification.new do |s|
   s.name        = 'commonmark_parslet'
-  s.version     = '0.0.6'
-  s.date        = '2015-02-26'
+  s.version     = '0.0.7'
+  s.date        = '2015-05-30'
   s.summary     = "Markdown parser"
   s.description = "Mardown parser, compliant to CommonMark, written with Parslet"
   s.authors     = ["Joel Meyer-Hamme"]
   s.email       = 'joel@meyer-hamme.com'
   s.files       = ["commonmark_parslet.rb"]
   s.homepage    = 'http://github.com/joelmeyerhamme/commonmark_parslet'
-  s.license     = "MIT"
+  s.license     = "CC BY"
 end
