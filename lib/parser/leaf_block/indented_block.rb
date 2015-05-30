@@ -6,11 +6,15 @@ class CommonMark::Parser::LeafBlock::IndentedBlock < Parslet::Parser
   end
 
   rule(:chunk) do
-    (pre.blank_line.absent? >> line).repeat(1) >> pre.blank_line
+    line.repeat(1) >> ((pre.whitespace.maybe >> newline).repeat(1) | any.absent?)
   end
 
   rule :line do
-    pre.tab >> pre.line
+    pre.tab >> pre.character.repeat >> pre.eol
+  end
+
+  rule :newline do
+    str("\n")
   end
 
   def pre
