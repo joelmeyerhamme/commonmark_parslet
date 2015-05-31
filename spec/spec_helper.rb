@@ -10,4 +10,3 @@ SimpleCov.start do
 end
 
 require './commonmark_parslet'
-

@@ -18,6 +18,6 @@ class CommonMark::Parser::LeafBlock::IndentedBlock < Parslet::Parser
   end
 
   def pre
-    @@pre ||= CommonMark::Parser::Preliminaries.new
+    @pre ||= CommonMark::Parser::Preliminaries.new
   end
 end

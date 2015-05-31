@@ -19,7 +19,7 @@ class CommonMark::Parser::LeafBlock::SetextHeader < Parslet::Parser
   end
 
   rule :leading_space do
-    pre.space_character.repeat(0,3)
+    pre.space_character.repeat(0, 3)
   end
 
   rule :whitespace do
@@ -31,6 +31,6 @@ class CommonMark::Parser::LeafBlock::SetextHeader < Parslet::Parser
   end
 
   def pre
-    @@pre ||= CommonMark::Parser::Preliminaries.new
+    @pre ||= CommonMark::Parser::Preliminaries.new
   end
 end

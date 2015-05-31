@@ -15,19 +15,19 @@ describe CommonMark::Parser::Preliminaries do
     end
 
     it "should parse ascii punctuation" do
-      CommonMark::Parser::Preliminaries.ascii_punctuation_chars.each do |p|
+      CommonMark::Parser::Preliminaries::ASCII_PUNCTUATION_CHARS.each do |p|
         is_expected.to parse(p)
       end
     end
 
     it "should parse unicode whitespace" do
-      CommonMark::Parser::Preliminaries.unicode_space_chars.each do |ch|
+      CommonMark::Parser::Preliminaries::UNICODE_SPACE_CHARS.each do |ch|
         is_expected.to parse(ch)
       end
     end
 
     it "should parse unicode punctuation" do
-      CommonMark::Parser::Preliminaries.unicode_punctuation_chars.each do |ch|
+      CommonMark::Parser::Preliminaries::UNICODE_PUNCTUATION_CHARS.each do |ch|
         is_expected.to parse(ch)
       end
     end
