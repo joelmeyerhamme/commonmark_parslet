@@ -1,24 +1,18 @@
 class CommonMark::Parser::Preliminaries < Parslet::Parser
-  def self.ascii_punctuation_chars
-    @@ascii_punctuation ||= [
-      '!', '"', '#', '$', '%', '&', '\'', '(', ')', '*', '+',
-      ',', '-', '.', '/', ':', ';', '<', '=', '>', '?', '@',
-      '[', '\\', ']', '^', '_', '`', '{', '|', '}', '|', '~' ]
+  ASCII_PUNCTUATION_CHARS = [
+    '!', '"', '#', '$', '%', '&', '\'', '(', ')', '*', '+',
+    ',', '-', '.', '/', ':', ';', '<', '=', '>', '?', '@',
+    '[', '\\', ']', '^', '_', '`', '{', '|', '}', '|', '~' ]
+
+  UNICODE_PUNCTUATION_CHARS = begin
+    classes = ["Pc", "Pd", "Pe", "Pf", "Pi", "Po", "Ps"]
+    char_codes = UnicodeData::CharClass[*classes]
+    char_codes.map { |ch| ch.to_i(16).chr('utf-8') }
   end
 
-  def self.unicode_punctuation_chars
-    @@unicode_punctuation ||= begin
-      classes = ["Pc", "Pd", "Pe", "Pf", "Pi", "Po", "Ps"]
-      char_codes = UnicodeData::CharClass[*classes]
-      char_codes.map { |ch| ch.to_i(16).chr('utf-8') }
-    end
-  end
-
-  def self.unicode_space_chars
-    @@unicode_space ||= begin
-      char_codes = UnicodeData::CharClass["Zs"]
-      char_codes.map { |ch| ch.to_i(16).chr('utf-8') }
-    end
+  UNICODE_SPACE_CHARS = begin
+    char_codes = UnicodeData::CharClass["Zs"]
+    char_codes.map { |ch| ch.to_i(16).chr('utf-8') }
   end
 
   root :line
@@ -76,15 +70,15 @@ class CommonMark::Parser::Preliminaries < Parslet::Parser
   # end
 
   rule :ascii_punctuation do
-    self.class.ascii_punctuation_chars.map { |s| str(s) }.reduce(:|)
+    ASCII_PUNCTUATION_CHARS.map { |s| str(s) }.reduce(:|)
   end
 
   rule :unicode_punctuation do
-    self.class.unicode_punctuation_chars.map { |ch| str(ch) }.reduce(:|)
+    UNICODE_PUNCTUATION_CHARS.map { |ch| str(ch) }.reduce(:|)
   end
 
   rule :unicode_space do
-    self.class.unicode_space_chars.map { |ch| str(ch) }.reduce(:|)
+    UNICODE_SPACE_CHARS.map { |ch| str(ch) }.reduce(:|)
   end
 
   rule :punctuation do

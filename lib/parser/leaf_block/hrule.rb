@@ -2,7 +2,7 @@ class CommonMark::Parser::LeafBlock::Hrule < Parslet::Parser
   root :hrule_line
 
   rule :hrule_line do
-    pre.space_character.repeat(0,3) >> hrule >> pre.whitespace.maybe
+    pre.space_character.repeat(0, 3) >> hrule >> pre.whitespace.maybe
   end
 
   rule :hrule do
@@ -14,6 +14,6 @@ class CommonMark::Parser::LeafBlock::Hrule < Parslet::Parser
   end
 
   def pre
-    @@pre ||= CommonMark::Parser::Preliminaries.new
+    @pre ||= CommonMark::Parser::Preliminaries.new
   end
 end
