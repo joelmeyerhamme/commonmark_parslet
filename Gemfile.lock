@@ -113,6 +113,7 @@ GEM
       unf_ext
     unf_ext (0.0.7.1)
     websocket (1.2.2)
+    yard (0.8.7.6)
 
 PLATFORMS
   ruby
@@ -126,3 +127,4 @@ DEPENDENCIES
   rspec
   simplecov
   travis
+  yard

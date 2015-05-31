@@ -1,46 +1,46 @@
 require './spec/spec_helper'
 
 describe CommonMark::Parser::Preliminaries do
-  describe "whitespace and punctuation" do
+  describe 'whitespace and punctuation' do
     subject(:char) { described_class.new.character }
-    it "should parse whitespace" do
-      is_expected.to parse(" ")
+    it 'should parse whitespace' do
+      is_expected.to parse(' ')
       is_expected.to parse("\t")
       is_expected.to parse("\0")
     end
 
-    it "should not parse vertical whitespace" do
+    it 'should not parse vertical whitespace' do
       is_expected.not_to parse("\r")
       is_expected.not_to parse("\n")
     end
 
-    it "should parse ascii punctuation" do
+    it 'should parse ascii punctuation' do
       CommonMark::Parser::Preliminaries::ASCII_PUNCTUATION_CHARS.each do |p|
         is_expected.to parse(p)
       end
     end
 
-    it "should parse unicode whitespace" do
+    it 'should parse unicode whitespace' do
       CommonMark::Parser::Preliminaries::UNICODE_SPACE_CHARS.each do |ch|
         is_expected.to parse(ch)
       end
     end
 
-    it "should parse unicode punctuation" do
+    it 'should parse unicode punctuation' do
       CommonMark::Parser::Preliminaries::UNICODE_PUNCTUATION_CHARS.each do |ch|
         is_expected.to parse(ch)
       end
     end
   end
 
-  it "should strip null characters" do
-    pending "omit naming in tree construction"
-    expect(subject.parse("\0")).to eq("")
+  it 'should strip null characters' do
+    pending 'omit naming in tree construction'
+    expect(subject.parse("\0")).to eq('')
   end
 
-  describe "tab expansion" do
-    it "should expand inline tabs to 4 chars" do
-      pending "put tabbing monstly into renderers?"
+  describe 'tab expansion' do
+    it 'should expand inline tabs to 4 chars' do
+      pending 'put tabbing monstly into renderers?'
       expect(subject.parse("\tfoo\tbaz\t\tbim")).to eq("<pre><code>foo baz     bim\n</code></pre>")
       expect(subject.parse("    a\ta\n    ὐ\ta")).to eq("<pre><code>a   a\nὐ   a\n</code></pre>")
     end

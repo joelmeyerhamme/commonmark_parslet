@@ -10,7 +10,7 @@ class CommonMark::Parser::LeafBlock::FencedBlock < Parslet::Parser
   end
 
   rule :closing do
-    dynamic do |s,c|
+    dynamic do |s, c|
       char = c.captures[:fence].to_s.scan(/(.)+/).last.first
       count = c.captures[:fence].size
       str(char).repeat(count)
@@ -18,6 +18,6 @@ class CommonMark::Parser::LeafBlock::FencedBlock < Parslet::Parser
   end
 
   def pre
-    @@pre ||= CommonMark::Parser::Preliminaries.new
+    @pre ||= CommonMark::Parser::Preliminaries.new
   end
 end

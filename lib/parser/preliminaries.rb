@@ -2,16 +2,16 @@ class CommonMark::Parser::Preliminaries < Parslet::Parser
   ASCII_PUNCTUATION_CHARS = [
     '!', '"', '#', '$', '%', '&', '\'', '(', ')', '*', '+',
     ',', '-', '.', '/', ':', ';', '<', '=', '>', '?', '@',
-    '[', '\\', ']', '^', '_', '`', '{', '|', '}', '|', '~' ]
+    '[', '\\', ']', '^', '_', '`', '{', '|', '}', '|', '~']
 
   UNICODE_PUNCTUATION_CHARS = begin
-    classes = ["Pc", "Pd", "Pe", "Pf", "Pi", "Po", "Ps"]
+    classes = ['Pc', 'Pd', 'Pe', 'Pf', 'Pi', 'Po', 'Ps']
     char_codes = UnicodeData::CharClass[*classes]
     char_codes.map { |ch| ch.to_i(16).chr('utf-8') }
   end
 
   UNICODE_SPACE_CHARS = begin
-    char_codes = UnicodeData::CharClass["Zs"]
+    char_codes = UnicodeData::CharClass['Zs']
     char_codes.map { |ch| ch.to_i(16).chr('utf-8') }
   end
 
@@ -46,7 +46,7 @@ class CommonMark::Parser::Preliminaries < Parslet::Parser
   end
 
   rule :space do
-    str(" ")
+    str(' ')
   end
 
   rule :carriage_return do

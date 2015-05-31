@@ -2,15 +2,15 @@ class CommonMark::Parser::LeafBlock::SetextHeader < Parslet::Parser
   root :setext_header
 
   rule :setext_header do
-    header("=") | header("-")
+    header('=') | header('-')
   end
 
-  def header char
+  def header(char)
     leading_space >> inline >> whitespace.maybe >> eol >>
     leading_space >> underline(char) >> whitespace.maybe >> eol
   end
 
-  def underline char
+  def underline(char)
     str(char).repeat(1)
   end
 

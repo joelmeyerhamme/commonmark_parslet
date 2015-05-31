@@ -1,7 +1,7 @@
 require './spec/spec_helper'
 
 describe CommonMark::Parser::LeafBlock::FencedBlock do
-  it "should consume backticks" do
+  it 'should consume backticks' do
     is_expected.to parse "```\nsome text\n```"
   end
 
@@ -28,7 +28,7 @@ describe CommonMark::Parser::LeafBlock::FencedBlock do
   end
 
   it 'should close unclosed blocks by end of document' do
-    is_expected.to parse "```"
+    is_expected.to parse '```'
     is_expected.to parse "`````\n\n```\naaa"
   end
 

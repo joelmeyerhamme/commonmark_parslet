@@ -7,6 +7,7 @@ group 'develop' do
   gem 'byebug'
   gem 'pry-rescue'
   gem 'pry-stack_explorer'
+  gem 'yard'
 end
 
 group 'test' do
