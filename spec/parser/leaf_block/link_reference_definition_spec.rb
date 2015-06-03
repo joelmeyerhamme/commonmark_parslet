@@ -10,7 +10,6 @@ describe CommonMark::Parser::LeafBlock::LinkReferenceDefinition do
   end
 
   it 'should consume any chars' do
-    pending 'implement escapes'
     is_expected.to parse('[Foo*bar\]]:my_(url) \'title (with parens)\'')
   end
 
