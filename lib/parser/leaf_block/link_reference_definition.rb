@@ -2,9 +2,9 @@ class CommonMark::Parser::LeafBlock::LinkReferenceDefinition < Parslet::Parser
   root :link_reference_definition
 
   rule :link_reference_definition do
-    upto_3_spaces >> label >> colon >> upto_1_newline >> opt_white_space >>
-      url >> upto_1_newline >> opt_white_space >>
-      quoted(pre.character | pre.whitespace) >> upto_1_newline
+    (upto_3_spaces >> label >> colon >> upto_1_newline >> opt_white_space >>
+          url >> (upto_1_newline >> opt_white_space >>
+                quoted(any | pre.whitespace) >> upto_1_newline).maybe).repeat
   end
 
   rule :url do
@@ -13,7 +13,7 @@ class CommonMark::Parser::LeafBlock::LinkReferenceDefinition < Parslet::Parser
 
   rule :label do
     left_bracket >>
-      ((right_bracket.absent?) >> pre.character | pre.whitespace).repeat(1) >>
+      ((escape_char >> any | right_bracket.absent? >> any) | pre.whitespace).repeat(1) >>
       right_bracket
   end
 
@@ -30,19 +30,19 @@ class CommonMark::Parser::LeafBlock::LinkReferenceDefinition < Parslet::Parser
   end
 
   rule :left_bracket do
-    no_escape >> str('[')
+    str('[')
   end
 
   rule :right_bracket do
-    no_escape >> str(']')
+    str(']')
   end
 
   rule :colon do
-    no_escape >> str(':')
+    str(':')
   end
 
-  rule :no_escape do
-    str('\\').absent?
+  rule :escape_char do
+    str('\\')
   end
 
   def quoted(content)
