@@ -18,7 +18,7 @@ class CommonMark::Parser::LeafBlock::LinkReferenceDefinition < Parslet::Parser
   end
 
   rule :upto_3_spaces do
-    pre.space_character.repeat(0,3)
+    pre.space_character.repeat(0, 3)
   end
 
   rule :upto_1_newline do
@@ -47,7 +47,7 @@ class CommonMark::Parser::LeafBlock::LinkReferenceDefinition < Parslet::Parser
 
   def quoted(content)
     match['"\''].capture(:quote) >>
-      dynamic do |s,c|
+      dynamic do |s, c|
         quote = str(c.captures[:quote])
         (quote.absent? >> content).repeat(1) >> quote
       end
