@@ -18,14 +18,17 @@ describe CommonMark::Parser::ContainerBlock::BlockQuote do
   end
 
   it 'should consume lazy quotes' do
+    pending 'container blocks content types not implemented'
     is_expected.to parse("> # Foo\n> bar\nbaz")
   end
 
   it 'should consume mixed lazy quotes' do
+    pending 'container blocks content types not implemented'
     is_expected.to parse("> bar\nbaz\n> foo")
   end
 
   it 'should not consume lazy non continuation lines' do
+    # pending 'container blocks content types not implemented'
     is_expected.not_to parse("> foo\n---")
     is_expected.not_to parse(">     foo\n    bar")
   end
@@ -40,10 +43,10 @@ describe CommonMark::Parser::ContainerBlock::BlockQuote do
   end
 
   it 'should not consume blank lines' do
-    is_expected.to parse("> foo\n\n> bar")
+    is_expected.not_to parse("> foo\n\n> bar")
   end
 
   it 'should not require blank lines' do
-    is_expected.to parse("> aaa\n***\n> bbb")
+    is_expected.not_to parse("> aaa\n***\n> bbb")
   end
 end
