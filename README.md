@@ -4,7 +4,7 @@
 [![build](https://img.shields.io/travis/joelmeyerhamme/commonmark_parslet.svg?style=flat)](https://travis-ci.org/joelmeyerhamme/commonmark_parslet)
 [![dependencies](https://img.shields.io/gemnasium/joelmeyerhamme/commonmark_parslet.svg?style=flat)](https://gemnasium.com/joelmeyerhamme/commonmark_parslet)
 [![issues](https://img.shields.io/github/issues-raw/joelmeyerhamme/commonmark_parslet.svg?style=flat)](https://github.com/joelmeyerhamme/commonmark_parslet/issues)
-[![Stories in Ready](https://badge.waffle.io/joelmeyerhamme/commonmark_parslet.png?label=ready&style=flat&title=Ready)](http://waffle.io/joelmeyerhamme/commonmark_parslet)
+[![ready](https://badge.waffle.io/joelmeyerhamme/commonmark_parslet.png?label=ready&title=ready)](http://waffle.io/joelmeyerhamme/commonmark_parslet)
 [![pending pull-requests](https://githubbadges.herokuapp.com/joelmeyerhamme/commonmark_parslet/pulls.svg?style=flat)](https://github.com/joelmeyerhamme/commonmark_parslet/pulls)
 [![tag](https://img.shields.io/github/tag/joelmeyerhamme/commonmark_parslet.svg?style=flat)](https://github.com/joelmeyerhamme/commonmark_parslet/tags)
 [![release](https://img.shields.io/github/release/joelmeyerhamme/commonmark_parslet.svg?style=flat)](https://github.com/joelmeyerhamme/commonmark_parslet/releases)
