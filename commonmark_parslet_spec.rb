@@ -28,18 +28,10 @@ describe CommonMark::Parser do
       expect(subject.parse('___')).to eq([{hrule: '___'}])
     end
 
-    it 'should not parse hline with two or different characters' do
-      expect(subject).not_to parse('--')
-      expect(subject).not_to parse('**')
-      expect(subject).not_to parse('__')
-      expect(subject).not_to parse('*-*')
-    end
-
     it 'should parse three whitespaces' do
       expect(subject.parse(' ***')).to eq([{hrule: '***'}])
       expect(subject.parse('  ***')).to eq([{hrule: '***'}])
       expect(subject.parse('   ***')).to eq([{hrule: '***'}])
-      expect(subject).not_to parse('    ***')
     end
 
     it 'should parse spaces' do
@@ -47,9 +39,6 @@ describe CommonMark::Parser do
       expect(subject.parse(' **  * ** * ** * **')).to eq([{hrule: '**  * ** * ** * **'}])
       expect(subject.parse('-     -      -      -')).to eq([{hrule: '-     -      -      -'}])
       expect(subject.parse('- - - -    ')).to eq([{hrule: '- - - -    '}])
-      expect(subject).not_to parse('_ _ _ _ a')
-      expect(subject).not_to parse('a------')
-      expect(subject).not_to parse('---a---')
     end
   end
 
@@ -63,5 +52,20 @@ describe CommonMark::Parser do
       expect(subject.parse('###### foo')).to eq([{atx_header: {grade: '######', inline: 'foo'}}])
       expect(subject.parse('#    foo')).to eq([{atx_header: {grade: '#', inline: 'foo'}}])
     end
+
+    it 'should parse setext headers' do
+      skip 'multi line'
+      expect(subject.parse("Foo *bar*\n=========")).to eq([{setext_header: {inline: 'Foo *bar*', grade: '========='}}])
+      expect(subject.parse("Foo *bar*\n---------")).to eq([{setext_header: {inline: 'Foo *bar*', grade: '---------'}}])
+    end
+  end
+
+  it 'should parse indented code blocks' do
+    expect(subject.parse("    code block")).to eq([{indented_code: 'code block'}])
+  end
+
+  it 'should parse fenced code blocks' do
+    byebug
+    expect(subject.parse("```\nhello\nworld\n```")).to eq([{fenced_code_block: "hello\nworld"}])
   end
 end
