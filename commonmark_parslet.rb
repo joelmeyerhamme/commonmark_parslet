@@ -12,9 +12,21 @@ module CommonMark
 
     rule :line do
       space.repeat(0, 3) >> (
-        hrule.as(:hrule)
-        atx_header.(:atx_header)
+        hrule.as(:hrule) |
+        atx_header.as(:atx_header)
         )
+    end
+
+    rule :atx_header do
+      str('#').repeat(1, 6).as(:grade) >> space.repeat(1) >> inline.as(:inline)
+    end
+
+    rule :inline do
+      (newline.absent? >> any).repeat
+    end
+
+    rule :newline do
+      str('\n')
     end
 
     rule :space do

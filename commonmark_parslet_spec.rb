@@ -2,6 +2,7 @@ require 'bundler'
 Bundler.require(:default, :test)
 require 'parslet/rig/rspec'
 require 'parslet/convenience'
+require 'byebug'
 
 
 
@@ -49,6 +50,18 @@ describe CommonMark::Parser do
       expect(subject).not_to parse('_ _ _ _ a')
       expect(subject).not_to parse('a------')
       expect(subject).not_to parse('---a---')
+    end
+  end
+
+  describe 'header' do
+    it 'should parse atx headers' do
+      expect(subject.parse('# foo')).to eq([{atx_header: {grade: '#', inline: 'foo'}}])
+      expect(subject.parse('## foo')).to eq([{atx_header: {grade: '##', inline: 'foo'}}])
+      expect(subject.parse('### foo')).to eq([{atx_header: {grade: '###', inline: 'foo'}}])
+      expect(subject.parse('#### foo')).to eq([{atx_header: {grade: '####', inline: 'foo'}}])
+      expect(subject.parse('##### foo')).to eq([{atx_header: {grade: '#####', inline: 'foo'}}])
+      expect(subject.parse('###### foo')).to eq([{atx_header: {grade: '######', inline: 'foo'}}])
+      expect(subject.parse('#    foo')).to eq([{atx_header: {grade: '#', inline: 'foo'}}])
     end
   end
 end
