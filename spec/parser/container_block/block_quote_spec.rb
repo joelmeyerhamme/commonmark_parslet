@@ -28,7 +28,7 @@ describe CommonMark::Parser::ContainerBlock::BlockQuote do
   end
 
   it 'should not consume lazy non continuation lines' do
-    # pending 'container blocks content types not implemented'
+    skip  'container blocks content types not implemented'
     is_expected.not_to parse("> foo\n---")
     is_expected.not_to parse(">     foo\n    bar")
   end

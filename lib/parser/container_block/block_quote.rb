@@ -14,10 +14,14 @@ class CommonMark::Parser::ContainerBlock::BlockQuote < Parslet::Parser
   end
 
   rule :content do
-    any
+    block_quote | leaf_block
   end
 
   def pre
     @pre ||= CommonMark::Parser::Preliminaries.new
+  end
+
+  def leaf_block
+    @leaf_block ||= CommonMark::Parser::LeafBlock.new
   end
 end
