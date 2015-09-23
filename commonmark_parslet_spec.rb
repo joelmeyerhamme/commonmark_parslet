@@ -10,3 +10,11 @@ SimpleCov.start do
 end
 
 require './commonmark_parslet'
+
+describe CommonMark::Parser do
+  it 'should parse hlines' do
+    expect subject.parse('***').to eq({hline: '***'})
+    expect subject.parse('---').to eq({hline: '---'})
+    expect subject.parse('–––').to eq({hline: '–––'})
+  end
+end
