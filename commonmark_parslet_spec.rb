@@ -76,4 +76,9 @@ describe CommonMark::Parser do
   it 'should parse paragraphs' do
     expect(subject.parse('hello world')).to eq([{inline: 'hello world'}])
   end
+
+  it 'should parse blank lines' do
+    expect(subject.parse('')).to eq([{blank: ''}])
+    expect(subject.parse('  ')).to eq([{blank: '  '}])
+  end
 end

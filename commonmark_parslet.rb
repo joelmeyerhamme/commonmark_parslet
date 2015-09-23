@@ -11,7 +11,7 @@ module CommonMark
     end
 
     rule :line do
-      (hrule | atx_header | indented_code | link_ref_def | inline.as(:inline) | fenced_code_block) >> newline
+      (hrule | atx_header | indented_code | link_ref_def | blank | inline.as(:inline) | fenced_code_block) >> newline
     end
 
     rule :atx_header do
@@ -31,8 +31,8 @@ module CommonMark
 
     rule :link_ref_def do
       opt_indent >> (str('[') >> (str(']').absent? >> any).repeat.as(:ref) >> str(']:') >> space >>
-              (space.absent? >> any).repeat.as(:link) >> space >> match['\'"'].capture(:quote) >> dynamic do |s,c|
-                (str(c.captures[:quote]).absent? >> any).repeat(1).as(:title) >> str(c.captures[:quote])
+        (space.absent? >> any).repeat.as(:link) >> space >> match['\'"'].capture(:quote) >> dynamic do |s,c|
+          (str(c.captures[:quote]).absent? >> any).repeat(1).as(:title) >> str(c.captures[:quote])
         end).as(:ref_def)
     end
 
@@ -42,6 +42,10 @@ module CommonMark
 
     rule :fence do
       str('`').repeat(3) | str('~').repeat(3)
+    end
+
+    rule :blank do
+      any.absent? | (newline.absent? >> space).repeat
     end
 
     rule :inline do
