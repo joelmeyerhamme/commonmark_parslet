@@ -72,4 +72,8 @@ describe CommonMark::Parser do
   it 'should parse link refernce defitions' do
     expect(subject.parse('[foo]: /url "title"')).to eq([{ref_def: {ref: 'foo', link: '/url', title: 'title'}}])
   end
+
+  it 'should parse paragraphs' do
+    expect(subject.parse('hello world')).to eq([{inline: 'hello world'}])
+  end
 end

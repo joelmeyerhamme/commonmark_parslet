@@ -11,7 +11,7 @@ module CommonMark
     end
 
     rule :line do
-      (hrule | atx_header | indented_code | link_ref_def | fenced_code_block) >> newline
+      (hrule | atx_header | indented_code | link_ref_def | inline.as(:inline) | fenced_code_block) >> newline
     end
 
     rule :atx_header do
@@ -45,7 +45,7 @@ module CommonMark
     end
 
     rule :inline do
-      (newline.absent? >> any).repeat
+      (newline.absent? >> any).repeat(1)
     end
 
     rule :newline do
