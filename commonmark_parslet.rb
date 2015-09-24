@@ -65,7 +65,11 @@ module CommonMark
     end
 
     rule :inline do
-      (escaped | text).as(:inline)
+      (escaped | entity | text).as(:inline)
+    end
+
+    rule :entity do
+      (str('&') >> (str(';').absent? >> match['a-zA-Z'].repeat(1)) >> str(';')).as(:entity)
     end
 
     rule :escaped do

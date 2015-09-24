@@ -95,4 +95,8 @@ describe CommonMark::Parser do
   it 'should parse backslash escaped characters' do
     expect(subject.parse('\!')).to eq([{inline: {escaped: '!'}}])
   end
+
+  it 'should parse html entities' do
+    expect(subject.parse('&amp;')).to eq([{inline: {entity: '&amp;'}}])
+  end
 end
