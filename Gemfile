@@ -12,6 +12,6 @@ end
 
 group 'test' do
   gem 'rspec'
-  gem 'coveralls'
+  gem 'coveralls', require :false
   gem 'simplecov'
 end
