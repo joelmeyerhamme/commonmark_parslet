@@ -1,6 +1,7 @@
 # commonmark_parslet
 
-[![coverage](https://img.shields.io/coveralls/joelmeyerhamme/commonmark_parslet.svg?style=flat)](https://coveralls.io/r/joelmeyerhamme/commonmark_parslet)
+<!-- [![code climate](https://img.shields.io/codeclimate/joelmeyerhamme/commonmark_parslet.svg?style=flat)](https://codeclimate.com/github/joelmeyerhamme/commonmark_parslet) -->
+[![coverage](https://img.shields.io/codeclimate/coverage/joelmeyerhamme/commonmark_parslet.svg?style=flat)](https://codeclimate.com/github/joelmeyerhamme/commonmark_parslet)
 [![build](https://img.shields.io/travis/joelmeyerhamme/commonmark_parslet.svg?style=flat)](https://travis-ci.org/joelmeyerhamme/commonmark_parslet)
 [![dependencies](https://img.shields.io/gemnasium/joelmeyerhamme/commonmark_parslet.svg?style=flat)](https://gemnasium.com/joelmeyerhamme/commonmark_parslet)
 [![issues](https://img.shields.io/github/issues-raw/joelmeyerhamme/commonmark_parslet.svg?style=flat)](https://github.com/joelmeyerhamme/commonmark_parslet/issues)
