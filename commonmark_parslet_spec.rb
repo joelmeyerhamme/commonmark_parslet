@@ -121,4 +121,8 @@ describe CommonMark::Parser do
   it 'should parse links' do
     expect(subject.parse('![description](/uri \'title\')')).to eq([{inline: [{image: {description: 'description', source: '/uri', title: 'title'}}]}])
   end
+
+  it 'should parse autolinks' do
+    expect(subject.parse('<http://foo.bar.baz>')).to eq([{inline: [{link: {destination: 'http://foo.bar.baz'}}]}])
+  end
 end

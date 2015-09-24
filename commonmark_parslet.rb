@@ -65,7 +65,11 @@ module CommonMark
     end
 
     rule :inline do
-      (escaped | entity | code_span | delimiter | link | image | text).repeat(1).as(:inline) >> space.repeat
+      (escaped | entity | code_span | delimiter | link | image | autolink | text).repeat(1).as(:inline) >> space.repeat
+    end
+
+    rule :autolink do
+      (str('<') >> (str('>').absent? >> any).repeat(1).as(:destination) >> str('>')).as(:link)
     end
 
     rule :image do
