@@ -1,13 +1,13 @@
 require './commonmark_parslet'
-Bundler.require(:test)
+# Bundler.require(:test)
 require 'parslet/rig/rspec'
 require 'parslet/convenience'
 
-SimpleCov.formatter = Coveralls::SimpleCov::Formatter
-SimpleCov.start do
-  add_group 'Libraries', 'lib'
-  add_filter 'spec'
-end
+# SimpleCov.formatter = Coveralls::SimpleCov::Formatter
+# SimpleCov.start do
+#   add_group 'Libraries', 'lib'
+#   add_filter 'spec'
+# end
 
 
 describe CommonMark::Parser do
@@ -40,24 +40,24 @@ describe CommonMark::Parser do
 
   describe 'header' do
     it 'should parse atx headers' do
-      expect(subject.parse('# foo')).to      eq([{atx_header: {grade: '#', inline: 'foo'}}])
-      expect(subject.parse('## foo')).to     eq([{atx_header: {grade: '##', inline: 'foo'}}])
-      expect(subject.parse('### foo')).to    eq([{atx_header: {grade: '###', inline: 'foo'}}])
-      expect(subject.parse('#### foo')).to   eq([{atx_header: {grade: '####', inline: 'foo'}}])
-      expect(subject.parse('##### foo')).to  eq([{atx_header: {grade: '#####', inline: 'foo'}}])
-      expect(subject.parse('###### foo')).to eq([{atx_header: {grade: '######', inline: 'foo'}}])
-      expect(subject.parse('#    foo')).to   eq([{atx_header: {grade: '#', inline: 'foo'}}])
+      expect(subject.parse('# foo')).to      eq([{atx_header: {grade: '#', inline: [{text: 'foo'}]}}])
+      expect(subject.parse('## foo')).to     eq([{atx_header: {grade: '##', inline: [{text: 'foo'}]}}])
+      expect(subject.parse('### foo')).to    eq([{atx_header: {grade: '###', inline: [{text: 'foo'}]}}])
+      expect(subject.parse('#### foo')).to   eq([{atx_header: {grade: '####', inline: [{text: 'foo'}]}}])
+      expect(subject.parse('##### foo')).to  eq([{atx_header: {grade: '#####', inline: [{text: 'foo'}]}}])
+      expect(subject.parse('###### foo')).to eq([{atx_header: {grade: '######', inline: [{text: 'foo'}]}}])
+      expect(subject.parse('#    foo')).to   eq([{atx_header: {grade: '#', inline: [{text: 'foo'}]}}])
     end
 
     it 'should parse setext headers' do
       skip 'multi line'
-      expect(subject.parse("Foo *bar*\n=========")).to eq([{setext_header: {inline: 'Foo *bar*', grade: '========='}}])
-      expect(subject.parse("Foo *bar*\n---------")).to eq([{setext_header: {inline: 'Foo *bar*', grade: '---------'}}])
+      expect(subject.parse("Foo *bar*\n=========")).to eq([{setext_header: {inline: [{text: 'Foo *bar*'}], grade: '========='}}])
+      expect(subject.parse("Foo *bar*\n---------")).to eq([{setext_header: {inline: [{text: 'Foo *bar*'}], grade: '---------'}}])
     end
   end
 
   it 'should parse indented code blocks' do
-    expect(subject.parse("    code block")).to eq([{indented_code: 'code block'}])
+    expect(subject.parse("    code block")).to eq([{indented_code: {text: 'code block'}}])
   end
 
   it 'should parse fenced code blocks' do
@@ -70,8 +70,9 @@ describe CommonMark::Parser do
   end
 
   it 'should parse paragraphs' do
-    expect(subject.parse('hello world')).to eq([{inline: 'hello world'}])
-    expect(subject.parse("hello\nworld")).to eq([{inline: 'hello'}, {inline: 'world'}])
+    expect(subject.parse('hello world')).to eq([{inline: [{text: 'hello world'}]}])
+    expect(subject.parse("hello\nworld")).to eq([{inline: [{text: 'hello'}]}, {inline: [{text: 'world'}]}])
+    expect(subject.parse("hello \nworld")).to eq([{inline: [{text: 'hello '}]}, {inline: [{text: 'world'}]}])
   end
 
   it 'should parse blank lines' do
@@ -80,29 +81,37 @@ describe CommonMark::Parser do
   end
 
   it 'should parse block quotes' do
-    expect(subject.parse('> hello world')).to eq([{quote: {inline: 'hello world'}}])
-    expect(subject.parse("> hello world\n> hello world")).to eq([{quote: {inline: 'hello world'}}, {quote: {inline: 'hello world'}}])
+    expect(subject.parse('> hello world')).to eq([{quote: {inline: [{text: 'hello world'}]}}])
+    expect(subject.parse("> hello world\n> hello world")).to eq([{quote: {inline: [{text: 'hello world'}]}}, {quote: {inline: [{text: 'hello world'}]}}])
   end
 
   it 'should parse ordered lists' do
-    expect(subject.parse("1. hello\n2. world")).to eq([{ordered_list: {inline: 'hello'}}, {ordered_list: {inline: 'world'}}])
+    expect(subject.parse("1. hello\n2. world")).to eq([{ordered_list: {inline: [{text: 'hello'}]}}, {ordered_list: {inline: [{text: 'world'}]}}])
   end
 
   it 'should parse ordered lists' do
-    expect(subject.parse("- hello\n- world")).to eq([{unordered_list: {inline: 'hello'}}, {unordered_list: {inline: 'world'}}])
+    expect(subject.parse("- hello\n- world")).to eq([{unordered_list: {inline: [{text: 'hello'}]}}, {unordered_list: {inline: [{text: 'world'}]}}])
   end
 
   it 'should parse backslash escaped characters' do
-    expect(subject.parse('\!')).to eq([{inline: {escaped: '!'}}])
+    expect(subject.parse('\!')).to eq([{inline: [{escaped: '!'}]}])
   end
 
   it 'should parse html entities' do
-    expect(subject.parse('&amp;')).to eq([{inline: {entity: '&amp;'}}])
-    expect(subject.parse('&#123;')).to eq([{inline: {entity: '&#123;'}}])
-    expect(subject.parse('&#x123;')).to eq([{inline: {entity: '&#x123;'}}])
+    expect(subject.parse('&amp;')).to eq([{inline: [{entity: '&amp;'}]}])
+    expect(subject.parse('&#123;')).to eq([{inline: [{entity: '&#123;'}]}])
+    expect(subject.parse('&#x123;')).to eq([{inline: [{entity: '&#x123;'}]}])
   end
 
   it 'should parse code spans' do
-    expect(subject.parse('`hello world`')).to eq([{inline: {code_span: 'hello world'}}])
+    expect(subject.parse('`hello world`')).to eq([{inline: [{code_span: 'hello world'}]}])
+  end
+
+  it 'should parse emphasis' do
+    expect(subject.parse('*hello*')).to eq([{:inline=>[{:left_delimiter=>"*"}, {:text=>"hello"}, {:right_delimiter=>"*"}]}])
+  end
+
+  it 'should parse strong emphasis' do
+    expect(subject.parse('**hello**')).to eq([{inline: [{:left_delimiter=>"**"}, {text: 'hello'}, {:right_delimiter=>"**"}]}])
   end
 end

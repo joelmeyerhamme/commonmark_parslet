@@ -27,11 +27,11 @@ module CommonMark
     end
 
     rule :ordered_list do
-      (opt_indent >> match['\d+'] >> match['\.\)'] >> space.maybe >> line).as(:ordered_list)
+      (opt_indent >> match['\d+'] >> match['\.\)'] >> space >> line).as(:ordered_list)
     end
 
     rule :unordered_list do
-      (opt_indent >> match['-+*'] >> space.maybe >> line).as(:unordered_list)
+      (opt_indent >> match['-+*'] >> space >> line).as(:unordered_list)
     end
 
     rule :atx_header do
@@ -65,7 +65,27 @@ module CommonMark
     end
 
     rule :inline do
-      (escaped | entity | code_span | text).as(:inline)
+      (escaped | entity | code_span | delimiter | text).repeat(1).as(:inline) >> space.repeat
+    end
+
+    rule :delimiter do
+      left_delimiter | right_delimiter
+    end
+
+    rule :left_delimiter do
+      (delimiter_ >> flank).as(:left_delimiter)
+    end
+
+    rule :right_delimiter do
+      (flank >> delimiter_).as(:right_delimiter)
+    end
+
+    rule :delimiter_ do
+      str('*').repeat(1,3) | str('_').repeat(1,3)
+    end
+
+    rule :flank do
+      (any.present? >> str(' ').absent?)
     end
 
     rule :entity do
@@ -99,7 +119,7 @@ module CommonMark
     end
 
     rule :text do
-      space.absent? >> (newline.absent? >> any).repeat(1)
+      space.absent? >> (newline.absent? >> delimiter.absent? >> any).repeat(1).as(:text)
     end
 
     rule :newline do
