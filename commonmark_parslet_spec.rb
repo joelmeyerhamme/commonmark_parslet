@@ -1,5 +1,5 @@
 require './commonmark_parslet'
-# Bundler.require(:test)
+Bundler.require(:test)
 require 'parslet/rig/rspec'
 require 'parslet/convenience'
 
@@ -66,7 +66,7 @@ describe CommonMark::Parser do
   end
 
   it 'should parse link refernce defitions' do
-    expect(subject.parse('[foo]: /url "title"')).to eq([{ref_def: {ref: 'foo', link: '/url', title: 'title'}}])
+    expect(subject.parse('[foo]: /url "title"')).to eq([{ref_def: {ref: 'foo', destination: '/url', title: 'title'}}])
   end
 
   it 'should parse paragraphs' do
@@ -113,5 +113,9 @@ describe CommonMark::Parser do
 
   it 'should parse strong emphasis' do
     expect(subject.parse('**hello**')).to eq([{inline: [{:left_delimiter=>"**"}, {text: 'hello'}, {:right_delimiter=>"**"}]}])
+  end
+
+  it 'should parse links' do
+    expect(subject.parse('[link](/uri "title")')).to eq([{inline: [{link: {text: 'link', destination: '/uri', title: 'title'}}]}])
   end
 end

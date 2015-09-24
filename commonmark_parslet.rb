@@ -51,7 +51,7 @@ module CommonMark
 
     rule :link_ref_def do
       opt_indent >> (str('[') >> (str(']').absent? >> any).repeat.as(:ref) >> str(']:') >> space >>
-        (space.absent? >> any).repeat.as(:link) >> space >> match['\'"'].capture(:quote) >> dynamic do |s,c|
+        (space.absent? >> any).repeat.as(:destination) >> space >> match['\'"'].capture(:quote) >> dynamic do |s,c|
           (str(c.captures[:quote]).absent? >> any).repeat(1).as(:title) >> str(c.captures[:quote])
         end).as(:ref_def)
     end
@@ -65,7 +65,14 @@ module CommonMark
     end
 
     rule :inline do
-      (escaped | entity | code_span | delimiter | text).repeat(1).as(:inline) >> space.repeat
+      (escaped | entity | code_span | delimiter | link | text).repeat(1).as(:inline) >> space.repeat
+    end
+
+    rule :link do
+      (str('[') >> (str(']').absent? >> any).repeat.as(:text) >> str('](') >>
+        (space.absent? >> any).repeat.as(:destination) >> (space >> match['\'"'].capture(:quote) >> dynamic do |s,c|
+            (str(c.captures[:quote]).absent? >> any).repeat(1).as(:title) >> str(c.captures[:quote])
+          end).maybe >> str(')')).as(:link)
     end
 
     rule :delimiter do
@@ -103,9 +110,6 @@ module CommonMark
     rule :hex_entity do
       str('&#') >> match['xX'] >> (str(';').absent? >> match['0-9'].repeat(1, 8)) >> str(';')
     end
-
-    # def entity_(m)
-    # end
 
     rule :code_span do
       str('`').repeat(1).capture(:backtick_string) >>
