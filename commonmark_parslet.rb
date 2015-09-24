@@ -7,29 +7,45 @@ module CommonMark
     root :document
 
     rule :document do
-      line.repeat
+      (line >> newline).repeat
     end
 
     rule :line do
-      (hrule | atx_header | quote | indented_code | link_ref_def | inline.as(:inline)) >> newline | (newline.absent? >> space.repeat(1) >> newline).as(:blank)
+      hrule | atx_header | quote | list | indented_code | link_ref_def | inline | blank
+    end
+
+    rule :blank do
+      (newline.absent? >> space.repeat(1)).as(:blank)
     end
 
     rule :quote do
-      (opt_indent >> str('>') >> space >> line).as(:quote)
+      (opt_indent >> str('>') >> space.maybe >> line).as(:quote)
+    end
+
+    rule :list do
+      ordered_list | unordered_list
+    end
+
+    rule :ordered_list do
+      (opt_indent >> match['\d+'] >> match['\.\)'] >> space.maybe >> line).as(:ordered_list)
+    end
+
+    rule :unordered_list do
+      (opt_indent >> match['-+*'] >> space.maybe >> line).as(:unordered_list)
     end
 
     rule :atx_header do
-      opt_indent >> (str('#').repeat(1, 6).as(:grade) >> space.repeat(1) >> inline.as(:inline)).as(:atx_header)
+      opt_indent >> (str('#').repeat(1, 6).as(:grade) >> space.repeat(1) >> inline).as(:atx_header)
     end
 
     rule :indented_code do
-      space.repeat(4) >> inline.as(:indented_code)
+      space.repeat(4) >> text.as(:indented_code)
     end
 
     rule :fenced_code_block do
       opt_indent >> fence.capture(:fence) >> str("\n") >>
         dynamic do |s,c|
-          (str(c.captures[:fence]).absent? >> inline >> newline).repeat(1) >> str(c.captures[:fence])
+          (str(c.captures[:fence]).absent? >> text >> newline).repeat(1) >> str(c.captures[:fence])
         end
     end
 
@@ -49,12 +65,15 @@ module CommonMark
     end
 
     rule :inline do
-      (newline.absent? >> space.absent? >> any) >>
-      (newline.absent? >> any).repeat(1)
+      text.as(:inline)
+    end
+
+    rule :text do
+      space.absent? >> (newline.absent? >> any).repeat(1)
     end
 
     rule :newline do
-      str('\n') | any.absent?
+      str("\n") | any.absent?
     end
 
     rule :space do

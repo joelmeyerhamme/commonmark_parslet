@@ -71,6 +71,7 @@ describe CommonMark::Parser do
 
   it 'should parse paragraphs' do
     expect(subject.parse('hello world')).to eq([{inline: 'hello world'}])
+    expect(subject.parse("hello\nworld")).to eq([{inline: 'hello'}, {inline: 'world'}])
   end
 
   it 'should parse blank lines' do
@@ -80,5 +81,14 @@ describe CommonMark::Parser do
 
   it 'should parse block quotes' do
     expect(subject.parse('> hello world')).to eq([{quote: {inline: 'hello world'}}])
+    expect(subject.parse("> hello world\n> hello world")).to eq([{quote: {inline: 'hello world'}}, {quote: {inline: 'hello world'}}])
+  end
+
+  it 'should parse ordered lists' do
+    expect(subject.parse("1. hello\n2. world")).to eq([{ordered_list: {inline: 'hello'}}, {ordered_list: {inline: 'world'}}])
+  end
+
+  it 'should parse ordered lists' do
+    expect(subject.parse("- hello\n- world")).to eq([{unordered_list: {inline: 'hello'}}, {unordered_list: {inline: 'world'}}])
   end
 end
