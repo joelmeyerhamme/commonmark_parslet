@@ -2,147 +2,218 @@ module CommonMark
   class Parser < Parslet::Parser
     root :document
 
-    rule :document do
-      (line >> newline).repeat
+    def rule(name, opts={}, &definition)
+      @rules ||= {}     # <name, rule> memoization
+        return @rules[name] if @rules.has_key?(name)
+        definition_closure = proc { self.instance_eval(&definition) }
+        @rules[name] = Atoms::Entity.new(name, &definition_closure)
+      end
+
+    def document
+      rule :document do
+        (line >> newline).repeat
+      end
     end
 
-    rule :line do
-      hrule | atx_header | quote | list | indented_code | link_ref_def | inline | blank
+    def line
+      rule :line do
+        hrule | atx_header | quote | list | indented_code | link_ref_def | inline | blank
+      end
     end
 
-    rule :blank do
-      (space.repeat(1) >> str("\n").absent?).as(:blank)
+    def blank
+      rule :blank do
+        (space.repeat(1) >> str("\n").absent?).as(:blank)
+      end
     end
 
-    rule :quote do
-      (opt_indent >> str('>') >> space.maybe >> line).as(:quote)
+    def quote
+      rule :quote do
+        (opt_indent >> str('>') >> space.maybe >> line).as(:quote)
+      end
     end
 
-    rule :list do
-      ordered_list | unordered_list
+    def list
+      rule :list do
+        ordered_list | unordered_list
+      end
     end
 
-    rule :ordered_list do
-      (opt_indent >> match['\d+'] >> match['\.\)'] >> space >> line).as(:ordered_list)
+    def ordered_list
+      rule :ordered_list do
+        (opt_indent >> match['\d+'] >> match['\.\)'] >> space >> line).as(:ordered_list)
+      end
     end
 
-    rule :unordered_list do
-      (opt_indent >> match['-+*'] >> space >> line).as(:unordered_list)
+    def unordered_list
+      rule :unordered_list do
+        (opt_indent >> match['-+*'] >> space >> line).as(:unordered_list)
+      end
     end
 
-    rule :atx_header do
-      opt_indent >> (str('#').repeat(1, 6).as(:grade) >> space.repeat(1) >> inline).as(:atx_header)
+    def atx_header
+      rule :atx_header do
+        opt_indent >> (str('#').repeat(1, 6).as(:grade) >> space.repeat(1) >> inline).as(:atx_header)
+      end
     end
 
-    rule :indented_code do
-      space.repeat(4) >> text.as(:indented_code)
+    def indented_code
+      rule :indented_code do
+        space.repeat(4) >> text.as(:indented_code)
+      end
     end
 
-    rule :fenced_code_block do
-      opt_indent >> fence.capture(:fence) >> str("\n") >>
-        dynamic do |s,c|
-          (str(c.captures[:fence]).absent? >> text >> newline).repeat(1) >> str(c.captures[:fence])
+    def fenced_code_block
+      rule :fenced_code_block do
+        opt_indent >> fence.capture(:fence) >> str("\n") >>
+          dynamic do |s,c|
+            (str(c.captures[:fence]).absent? >> text >> newline).repeat(1) >> str(c.captures[:fence])
+          end
         end
     end
 
-    rule :link_ref_def do
-      opt_indent >> (str('[') >> (str(']').absent? >> any).repeat.as(:ref) >> str(']:') >> space >>
-        (space.absent? >> any).repeat.as(:destination) >> space >> match['\'"'].capture(:quote) >> dynamic do |s,c|
-          (str(c.captures[:quote]).absent? >> any).repeat(1).as(:title) >> str(c.captures[:quote])
-        end).as(:ref_def)
+    def link_ref_def
+      rule :link_ref_def do
+        opt_indent >> (str('[') >> (str(']').absent? >> any).repeat.as(:ref) >> str(']:') >> space >>
+          (space.absent? >> any).repeat.as(:destination) >> space >> match['\'"'].capture(:quote) >> dynamic do |s,c|
+            (str(c.captures[:quote]).absent? >> any).repeat(1).as(:title) >> str(c.captures[:quote])
+          end).as(:ref_def)
+      end
     end
 
-    rule :opt_indent do
-      space.repeat(0, 3)
+    def opt_indent
+      rule :opt_indent do
+        space.repeat(0, 3)
+      end
     end
 
-    rule :fence do
-      str('`').repeat(3) | str('~').repeat(3)
+    def fence
+      rule :fence do
+        str('`').repeat(3) | str('~').repeat(3)
+      end
     end
 
-    rule :inline do
-      (escaped | entity | code_span | delimiter | link | image | autolink | text).repeat(1).as(:inline)
+    def inline
+      rule :inline do
+        (escaped | entity | code_span | delimiter | link | image | autolink | text).repeat(1).as(:inline)
+      end
     end
 
-    rule :autolink do
-      (str('<') >> (str('>').absent? >> any).repeat(1).as(:destination) >> str('>')).as(:link)
+    def autolink
+      rule :autolink do
+        (str('<') >> (str('>').absent? >> any).repeat(1).as(:destination) >> str('>')).as(:link)
+      end
     end
 
-    rule :image do
-      (str('![') >> (str(']').absent? >> any).repeat.as(:description) >> str('](') >>
+    def image
+      rule :image do
+        (str('![') >> (str(']').absent? >> any).repeat.as(:description) >> str('](') >>
         (space.absent? >> any).repeat.as(:source) >> (space >> match['\'"'].capture(:quote) >> dynamic do |s,c|
             (str(c.captures[:quote]).absent? >> any).repeat(1).as(:title) >> str(c.captures[:quote])
           end).maybe >> str(')')).as(:image)
+      end
     end
 
-    rule :link do
-      (str('[') >> (str(']').absent? >> any).repeat.as(:text) >> str('](') >>
+    def link
+      rule :link do
+        (str('[') >> (str(']').absent? >> any).repeat.as(:text) >> str('](') >>
         (space.absent? >> any).repeat.as(:destination) >> (space >> match['\'"'].capture(:quote) >> dynamic do |s,c|
             (str(c.captures[:quote]).absent? >> any).repeat(1).as(:title) >> str(c.captures[:quote])
           end).maybe >> str(')')).as(:link)
+      end
     end
 
-    rule :delimiter do
-      left_delimiter | right_delimiter
+    def delimiter
+      rule :delimiter do
+        left_delimiter | right_delimiter
+      end
     end
 
-    rule :left_delimiter do
-      (delimiter_ >> flank).as(:left_delimiter)
+    def left_delimiter
+      rule :left_delimiter do
+        (delimiter_ >> flank).as(:left_delimiter)
+      end
     end
 
-    rule :right_delimiter do
-      (flank >> delimiter_).as(:right_delimiter)
+    def right_delimiter
+      rule :right_delimiter do
+        (flank >> delimiter_).as(:right_delimiter)
+      end
     end
 
-    rule :delimiter_ do
-      str('*').repeat(1,3) | str('_').repeat(1,3)
+    def delimiter_
+      rule :delimiter_ do
+        str('*').repeat(1,3) | str('_').repeat(1,3)
+      end
     end
 
-    rule :flank do
-      (any.present? >> str(' ').absent?)
+    def flank
+      rule :flank do
+        (any.present? >> str(' ').absent?)
+      end
     end
 
-    rule :entity do
-      (html_entity | decimal_entity | hex_entity).as(:entity)
+    def entity
+      rule :entity do
+        (html_entity | decimal_entity | hex_entity).as(:entity)
+      end
     end
 
-    rule :html_entity do
-      str('&') >> (str(';').absent? >> match['a-zA-Z'].repeat(1)) >> str(';')
+    def html_entity
+      rule :html_entity do
+        str('&') >> (str(';').absent? >> match['a-zA-Z'].repeat(1)) >> str(';')
+      end
     end
 
-    rule :decimal_entity do
-      str('&#') >> (str(';').absent? >> match['0-9'].repeat(1, 8)) >> str(';')
+    def decimal_entity
+      rule :decimal_entity do
+        str('&#') >> (str(';').absent? >> match['0-9'].repeat(1, 8)) >> str(';')
+      end
     end
 
-    rule :hex_entity do
-      str('&#') >> match['xX'] >> (str(';').absent? >> match['0-9'].repeat(1, 8)) >> str(';')
+    def hex_entity
+      rule :hex_entity do
+        str('&#') >> match['xX'] >> (str(';').absent? >> match['0-9'].repeat(1, 8)) >> str(';')
+      end
     end
 
-    rule :code_span do
-      str('`').repeat(1).capture(:backtick_string) >>
+    def code_span
+      rule :code_span do
+        str('`').repeat(1).capture(:backtick_string) >>
         dynamic do |s,c|
           (str(c.captures[:backtick_string]).absent? >> newline.absent? >> any).repeat(1).as(:code_span) >> str(c.captures[:backtick_string])
         end
+      end
     end
 
-    rule :escaped do
-      str('\\') >> any.as(:escaped) # actually only punctuation
+    def escaped
+      rule :escaped do
+        str('\\') >> any.as(:escaped) # actually only punctuation
+      end
     end
 
-    rule :text do
-      space.absent? >> (newline.absent? >> delimiter.absent? >> any).repeat(1).as(:text)
+    def text
+      rule :text do
+        space.absent? >> (newline.absent? >> delimiter.absent? >> any).repeat(1).as(:text)
+      end
     end
 
-    rule :newline do
-      str('  ').as(:hard_break).maybe >> (str("\n") | any.absent?)
+    def newline
+      rule :newline do
+        str('  ').as(:hard_break).maybe >> (str("\n") | any.absent?)
+      end
     end
 
-    rule :space do
-      str(' ')
+    def space
+      rule :space do
+        str(' ')
+      end
     end
 
-    rule :hrule do
-      opt_indent >> (hrule_('*') | (hrule_('-') | str('=').repeat(1)) | hrule_('_')).as(:hrule)
+    def hrule
+      rule :hrule do
+        opt_indent >> (hrule_('*') | (hrule_('-') | str('=').repeat(1)) | hrule_('_')).as(:hrule)
+      end
     end
 
     def hrule_(char)
