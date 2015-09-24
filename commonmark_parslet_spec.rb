@@ -98,5 +98,7 @@ describe CommonMark::Parser do
 
   it 'should parse html entities' do
     expect(subject.parse('&amp;')).to eq([{inline: {entity: '&amp;'}}])
+    expect(subject.parse('&#123;')).to eq([{inline: {entity: '&#123;'}}])
+    expect(subject.parse('&#x123;')).to eq([{inline: {entity: '&#x123;'}}])
   end
 end

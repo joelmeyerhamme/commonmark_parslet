@@ -69,8 +69,23 @@ module CommonMark
     end
 
     rule :entity do
-      (str('&') >> (str(';').absent? >> match['a-zA-Z'].repeat(1)) >> str(';')).as(:entity)
+      (html_entity | decimal_entity | hex_entity).as(:entity)
     end
+
+    rule :html_entity do
+      str('&') >> (str(';').absent? >> match['a-zA-Z'].repeat(1)) >> str(';')
+    end
+
+    rule :decimal_entity do
+      str('&#') >> (str(';').absent? >> match['0-9'].repeat(1, 8)) >> str(';')
+    end
+
+    rule :hex_entity do
+      str('&#') >> match['xX'] >> (str(';').absent? >> match['0-9'].repeat(1, 8)) >> str(';')
+    end
+
+    # def entity_(m)
+    # end
 
     rule :escaped do
       str('\\') >> any.as(:escaped) # actually only punctuation
