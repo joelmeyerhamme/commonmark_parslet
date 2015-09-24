@@ -131,4 +131,10 @@ describe CommonMark::Parser do
   it 'should parse hard breaks' do
     expect(subject.parse('text  ')).to eq([{inline: [{text: 'text'}], hard_break: '  '}])
   end
+
+  it 'should parse plain text' do
+    expect(subject.parse('hello $.;\'there')).to    eq([{inline: [{text: "hello $.;'there"}]}])
+    expect(subject.parse('Foo χρῆν')).to            eq([{inline: [{text: "Foo χρῆν"}]}])
+    expect(subject.parse('Multiple     spaces')).to eq([{inline: [{text: "Multiple     spaces"}]}])
+  end
 end
