@@ -14,6 +14,8 @@ GEM
       debug_inspector (>= 0.0.1)
     blankslate (2.1.2.4)
     byebug (6.0.2)
+    codeclimate-test-reporter (0.4.8)
+      simplecov (>= 0.7.1, < 1.0.0)
     coderay (1.1.0)
     coveralls (0.8.2)
       json (~> 1.8)
@@ -118,6 +120,7 @@ PLATFORMS
 
 DEPENDENCIES
   byebug
+  codeclimate-test-reporter
   coveralls
   parslet!
   pry-rescue

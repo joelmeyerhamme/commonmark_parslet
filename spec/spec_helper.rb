@@ -3,5 +3,5 @@ Bundler.require(:test)
 require 'parslet/rig/rspec'
 require 'parslet/convenience'
 
-require 'coveralls'
-Coveralls.wear!
+require "codeclimate-test-reporter"
+CodeClimate::TestReporter.start
