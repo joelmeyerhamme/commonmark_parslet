@@ -9,7 +9,6 @@ require 'parslet/convenience'
 #   add_filter 'spec'
 # end
 
-
 describe CommonMark::Parser do
   describe 'hrule' do
     it 'should parse hline with *' do
@@ -50,9 +49,8 @@ describe CommonMark::Parser do
     end
 
     it 'should parse setext headers' do
-      skip 'multi line'
-      expect(subject.parse("Foo *bar*\n=========")).to eq([{setext_header: {inline: [{text: 'Foo *bar*'}], grade: '========='}}])
-      expect(subject.parse("Foo *bar*\n---------")).to eq([{setext_header: {inline: [{text: 'Foo *bar*'}], grade: '---------'}}])
+      expect(subject.parse("Foo bar\n=========")).to eq([{inline: [{text: 'Foo bar'}]}, {hrule: '========='}])
+      expect(subject.parse("Foo bar\n---------")).to eq([{inline: [{text: 'Foo bar'}]}, {hrule: '---------'}])
     end
   end
 

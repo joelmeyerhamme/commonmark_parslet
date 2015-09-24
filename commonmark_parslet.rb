@@ -146,7 +146,7 @@ module CommonMark
     end
 
     rule :hrule do
-      opt_indent >> (hrule_('*') | hrule_('-') | hrule_('_')).as(:hrule)
+      opt_indent >> (hrule_('*') | (hrule_('-') | str('=').repeat(1)) | hrule_('_')).as(:hrule)
     end
 
     def hrule_(char)
