@@ -77,6 +77,8 @@ describe CommonMark::Parser do
 
   it 'should parse blank lines' do
     expect(subject.parse('  ')).to eq([{blank: '  '}])
+    expect(subject.parse('   ')).to eq([{blank: '   '}])
+    expect(subject.parse('    ')).to eq([{blank: '    '}])
   end
 
   it 'should parse block quotes' do
@@ -124,5 +126,9 @@ describe CommonMark::Parser do
 
   it 'should parse autolinks' do
     expect(subject.parse('<http://foo.bar.baz>')).to eq([{inline: [{link: {destination: 'http://foo.bar.baz'}}]}])
+  end
+
+  it 'should parse hard breaks' do
+    expect(subject.parse('text  ')).to eq([{inline: [{text: 'text'}], hard_break: '  '}])
   end
 end

@@ -15,7 +15,7 @@ module CommonMark
     end
 
     rule :blank do
-      (newline.absent? >> space.repeat(1)).as(:blank)
+      (space.repeat(1) >> str("\n").absent?).as(:blank)
     end
 
     rule :quote do
@@ -65,7 +65,7 @@ module CommonMark
     end
 
     rule :inline do
-      (escaped | entity | code_span | delimiter | link | image | autolink | text).repeat(1).as(:inline) >> space.repeat
+      (escaped | entity | code_span | delimiter | link | image | autolink | text).repeat(1).as(:inline)
     end
 
     rule :autolink do
@@ -138,7 +138,7 @@ module CommonMark
     end
 
     rule :newline do
-      str("\n") | any.absent?
+      str('  ').as(:hard_break).maybe >> (str("\n") | any.absent?)
     end
 
     rule :space do
