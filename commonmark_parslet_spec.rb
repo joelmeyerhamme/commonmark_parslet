@@ -91,4 +91,8 @@ describe CommonMark::Parser do
   it 'should parse ordered lists' do
     expect(subject.parse("- hello\n- world")).to eq([{unordered_list: {inline: 'hello'}}, {unordered_list: {inline: 'world'}}])
   end
+
+  it 'should parse backslash escaped characters' do
+    expect(subject.parse('\!')).to eq([{inline: {escaped: '!'}}])
+  end
 end

@@ -65,7 +65,11 @@ module CommonMark
     end
 
     rule :inline do
-      text.as(:inline)
+      (escaped | text).as(:inline)
+    end
+
+    rule :escaped do
+      str('\\') >> any.as(:escaped) # actually only punctuation
     end
 
     rule :text do
