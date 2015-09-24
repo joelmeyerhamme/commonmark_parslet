@@ -88,7 +88,10 @@ module CommonMark
     # end
 
     rule :code_span do
-      str('`') >> (str('`').absent? >> newline.absent? >> any).repeat(1).as(:code_span) >> str('`')
+      str('`').repeat(1).capture(:backtick_string) >>
+        dynamic do |s,c|
+          (str(c.captures[:backtick_string]).absent? >> newline.absent? >> any).repeat(1).as(:code_span) >> str(c.captures[:backtick_string])
+        end
     end
 
     rule :escaped do
