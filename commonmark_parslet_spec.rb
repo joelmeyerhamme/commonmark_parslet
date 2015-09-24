@@ -101,4 +101,8 @@ describe CommonMark::Parser do
     expect(subject.parse('&#123;')).to eq([{inline: {entity: '&#123;'}}])
     expect(subject.parse('&#x123;')).to eq([{inline: {entity: '&#x123;'}}])
   end
+
+  it 'should parse code spans' do
+    expect(subject.parse('`hello world`')).to eq([{inline: {code_span: 'hello world'}}])
+  end
 end

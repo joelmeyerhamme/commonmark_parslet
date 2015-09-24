@@ -65,7 +65,7 @@ module CommonMark
     end
 
     rule :inline do
-      (escaped | entity | text).as(:inline)
+      (escaped | entity | code_span | text).as(:inline)
     end
 
     rule :entity do
@@ -86,6 +86,10 @@ module CommonMark
 
     # def entity_(m)
     # end
+
+    rule :code_span do
+      str('`') >> (str('`').absent? >> newline.absent? >> any).repeat(1).as(:code_span) >> str('`')
+    end
 
     rule :escaped do
       str('\\') >> any.as(:escaped) # actually only punctuation
