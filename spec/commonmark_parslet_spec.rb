@@ -50,8 +50,7 @@ describe CommonMark::Parser do
   end
 
   it 'should parse fenced code blocks' do
-    skip 'stalling'
-    expect(subject.parse("```\nhello\nworld\n```")).to eq([{fenced_code_block: "hello\nworld"}])
+    expect(subject.parse("```\nhello\nworld\n```")).to eq([{fenced_code_block: [{text: "hello"}, {text: "world"}]}])
   end
 
   it 'should parse link refernce defitions' do

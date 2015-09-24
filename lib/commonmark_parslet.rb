@@ -17,7 +17,7 @@ module CommonMark
 
     def line
       rule :line do
-        hrule | atx_header | quote | list | indented_code | link_ref_def | inline | blank
+        fenced_code_block | hrule | atx_header | quote | list | indented_code | link_ref_def | inline | blank
       end
     end
 
@@ -69,7 +69,7 @@ module CommonMark
           dynamic do |s,c|
             (str(c.captures[:fence]).absent? >> text >> newline).repeat(1) >> str(c.captures[:fence])
           end
-        end
+        end.as(:fenced_code_block)
     end
 
     def link_ref_def
