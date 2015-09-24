@@ -17,7 +17,8 @@ module CommonMark
 
     def line
       rule :line do
-        fenced_code_block | hrule | atx_header | quote | list | indented_code | link_ref_def | inline | blank
+        fenced_code_block | hrule | atx_header | quote | list |
+        indented_code | link_ref_def | inline | blank
       end
     end
 
