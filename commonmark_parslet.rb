@@ -65,7 +65,14 @@ module CommonMark
     end
 
     rule :inline do
-      (escaped | entity | code_span | delimiter | link | text).repeat(1).as(:inline) >> space.repeat
+      (escaped | entity | code_span | delimiter | link | image | text).repeat(1).as(:inline) >> space.repeat
+    end
+
+    rule :image do
+      (str('![') >> (str(']').absent? >> any).repeat.as(:description) >> str('](') >>
+        (space.absent? >> any).repeat.as(:source) >> (space >> match['\'"'].capture(:quote) >> dynamic do |s,c|
+            (str(c.captures[:quote]).absent? >> any).repeat(1).as(:title) >> str(c.captures[:quote])
+          end).maybe >> str(')')).as(:image)
     end
 
     rule :link do

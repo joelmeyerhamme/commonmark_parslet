@@ -76,7 +76,6 @@ describe CommonMark::Parser do
   end
 
   it 'should parse blank lines' do
-    # expect(subject.parse('')).to   eq([{blank: ''}]) # empty document
     expect(subject.parse('  ')).to eq([{blank: '  '}])
   end
 
@@ -117,5 +116,9 @@ describe CommonMark::Parser do
 
   it 'should parse links' do
     expect(subject.parse('[link](/uri "title")')).to eq([{inline: [{link: {text: 'link', destination: '/uri', title: 'title'}}]}])
+  end
+
+  it 'should parse links' do
+    expect(subject.parse('![description](/uri \'title\')')).to eq([{inline: [{image: {description: 'description', source: '/uri', title: 'title'}}]}])
   end
 end
