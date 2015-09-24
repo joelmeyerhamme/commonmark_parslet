@@ -4,4 +4,5 @@ rvm:
 env:
   global:
     secure: DeA6PHbiPNpslkSB3tIw6Ws0SQ0VUSR3llFV6UjB+hiQykZJyTAc2XRexo3OnrDh975ZIaSRWADodOkgNhJAhtBXUWwvV3R8R0SH71kH3AUNmB+ehhLcnbW3apcj56kOHW0RVooNCOSOPyt5keqK39JW8g9aia4k4IAPCwLEqpU=
+    secure: "YtVCpiCM1jGZJ4VphzG2Sc43c3PK40Lg7HHfbNCyCien+0+ttLkjc+SkSkOPm6u3LV+E5rq2mk4bI3ugCJ8FAAlco8x0nuMb25f0r59lgBYFiJQQBNO6n7KaVG3nFnIPOj1FdJvFjBhmk8lUxq0jh3MoDpLONVPRBi+x+o6mtsc="
 script: bundle exec rspec
