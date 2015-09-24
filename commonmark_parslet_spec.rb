@@ -1,10 +1,7 @@
-require 'bundler'
-Bundler.require(:default, :test)
+require './commonmark_parslet'
+Bundler.require(:test)
 require 'parslet/rig/rspec'
 require 'parslet/convenience'
-require 'byebug'
-
-
 
 SimpleCov.formatter = Coveralls::SimpleCov::Formatter
 SimpleCov.start do
@@ -12,7 +9,6 @@ SimpleCov.start do
   add_filter 'spec'
 end
 
-require './commonmark_parslet'
 
 describe CommonMark::Parser do
   describe 'hrule' do
@@ -29,28 +25,28 @@ describe CommonMark::Parser do
     end
 
     it 'should parse three whitespaces' do
-      expect(subject.parse(' ***')).to eq([{hrule: '***'}])
-      expect(subject.parse('  ***')).to eq([{hrule: '***'}])
+      expect(subject.parse(' ***')).to   eq([{hrule: '***'}])
+      expect(subject.parse('  ***')).to  eq([{hrule: '***'}])
       expect(subject.parse('   ***')).to eq([{hrule: '***'}])
     end
 
     it 'should parse spaces' do
-      expect(subject.parse(' - - -')).to eq([{hrule: '- - -'}])
-      expect(subject.parse(' **  * ** * ** * **')).to eq([{hrule: '**  * ** * ** * **'}])
+      expect(subject.parse(' - - -')).to                eq([{hrule: '- - -'}])
+      expect(subject.parse(' **  * ** * ** * **')).to   eq([{hrule: '**  * ** * ** * **'}])
       expect(subject.parse('-     -      -      -')).to eq([{hrule: '-     -      -      -'}])
-      expect(subject.parse('- - - -    ')).to eq([{hrule: '- - - -    '}])
+      expect(subject.parse('- - - -    ')).to           eq([{hrule: '- - - -    '}])
     end
   end
 
   describe 'header' do
     it 'should parse atx headers' do
-      expect(subject.parse('# foo')).to eq([{atx_header: {grade: '#', inline: 'foo'}}])
-      expect(subject.parse('## foo')).to eq([{atx_header: {grade: '##', inline: 'foo'}}])
-      expect(subject.parse('### foo')).to eq([{atx_header: {grade: '###', inline: 'foo'}}])
-      expect(subject.parse('#### foo')).to eq([{atx_header: {grade: '####', inline: 'foo'}}])
-      expect(subject.parse('##### foo')).to eq([{atx_header: {grade: '#####', inline: 'foo'}}])
+      expect(subject.parse('# foo')).to      eq([{atx_header: {grade: '#', inline: 'foo'}}])
+      expect(subject.parse('## foo')).to     eq([{atx_header: {grade: '##', inline: 'foo'}}])
+      expect(subject.parse('### foo')).to    eq([{atx_header: {grade: '###', inline: 'foo'}}])
+      expect(subject.parse('#### foo')).to   eq([{atx_header: {grade: '####', inline: 'foo'}}])
+      expect(subject.parse('##### foo')).to  eq([{atx_header: {grade: '#####', inline: 'foo'}}])
       expect(subject.parse('###### foo')).to eq([{atx_header: {grade: '######', inline: 'foo'}}])
-      expect(subject.parse('#    foo')).to eq([{atx_header: {grade: '#', inline: 'foo'}}])
+      expect(subject.parse('#    foo')).to   eq([{atx_header: {grade: '#', inline: 'foo'}}])
     end
 
     it 'should parse setext headers' do
@@ -78,7 +74,11 @@ describe CommonMark::Parser do
   end
 
   it 'should parse blank lines' do
-    expect(subject.parse('')).to eq([{blank: ''}])
+    # expect(subject.parse('')).to   eq([{blank: ''}]) # empty document
     expect(subject.parse('  ')).to eq([{blank: '  '}])
+  end
+
+  it 'should parse block quotes' do
+    expect(subject.parse('> hello world')).to eq([{quote: {inline: 'hello world'}}])
   end
 end

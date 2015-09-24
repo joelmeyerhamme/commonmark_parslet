@@ -1,6 +1,6 @@
 require 'rubygems'
 require 'bundler'
-Bundler.require(:default)
+Bundler.require(:default, :develop)
 
 module CommonMark
   class Parser < Parslet::Parser
@@ -11,7 +11,11 @@ module CommonMark
     end
 
     rule :line do
-      (hrule | atx_header | indented_code | link_ref_def | blank | inline.as(:inline) | fenced_code_block) >> newline
+      (hrule | atx_header | quote | indented_code | link_ref_def | inline.as(:inline)) >> newline | (newline.absent? >> space.repeat(1) >> newline).as(:blank)
+    end
+
+    rule :quote do
+      (opt_indent >> str('>') >> space >> line).as(:quote)
     end
 
     rule :atx_header do
@@ -44,11 +48,8 @@ module CommonMark
       str('`').repeat(3) | str('~').repeat(3)
     end
 
-    rule :blank do
-      any.absent? | (newline.absent? >> space).repeat
-    end
-
     rule :inline do
+      (newline.absent? >> space.absent? >> any) >>
       (newline.absent? >> any).repeat(1)
     end
 
@@ -61,10 +62,11 @@ module CommonMark
     end
 
     rule :hrule do
-      opt_indent >>
-      ((str('-') >> space.repeat(0)).repeat(3) |
-        (str('*') >> space.repeat(0)).repeat(3) |
-        (str('_') >> space.repeat(0)).repeat(3)).as(:hrule)
+      opt_indent >> (hrule_('*') | hrule_('-') | hrule_('_')).as(:hrule)
+    end
+
+    def hrule_(char)
+      (str(char) >> space.repeat(0)).repeat(3)
     end
   end
 end
