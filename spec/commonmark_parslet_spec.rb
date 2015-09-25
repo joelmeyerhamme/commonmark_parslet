@@ -67,6 +67,8 @@ describe CommonMark::Parser do
     expect(subject.parse('  ')).to   eq({document: [{blank: '  '}]})
     expect(subject.parse('   ')).to  eq({document: [{blank: '   '}]})
     expect(subject.parse('    ')).to eq({document: [{blank: '    '}]})
+    expect(subject.parse("\n")).to eq({document: [{blank: ''}]})
+    expect(subject.parse("hello\n\nworld")).to eq({document: [{blank: '    '}]})
   end
 
   it 'should parse block quotes' do
