@@ -3,12 +3,16 @@ module CommonMark
     root :document
 
     rule :document do
-      (line >> newline).repeat
+      (line >> newline).repeat.as(:document)
     end
 
     rule :line do
-      fenced_code_block | hrule | atx_header | quote | list |
+      fenced_code_block | setext_header | hrule | atx_header | quote | list |
         indented_code | link_ref_def | inline | blank
+    end
+
+    rule :setext_header do
+      (opt_indent >> inline >> newline >> opt_indent >> (str('=').repeat(1) | str('-').repeat(1)).as(:grade)).as(:setext_header)
     end
 
     rule :blank do
@@ -143,11 +147,19 @@ module CommonMark
     end
 
     rule :hrule do
-      opt_indent >> (hrule_('*') | (hrule_('-') | str('=').repeat(1)) | hrule_('_')).as(:hrule)
+      opt_indent >> (hrule_('*') | hrule_('-') | hrule_('_')).as(:hrule)
     end
 
     def hrule_(char)
       (str(char) >> space.repeat(0)).repeat(3)
     end
+  end
+
+  class HtmlTransform < Parslet::Transform
+    # rule(inline: subtree(:tree))
+    # rule(hrule: simple(:x)) { '<hr />' }
+    # rule(text: simple(:text)) { "#{text}" }
+    # rule(atx_header: {grade: simple(:grade), inline: sequence(:content)}) { "<h#{grade.size}>#{content.join}</h#{grade.size}>" }
+    # rule(document: sequence(:x)) { x.join("\n") }
   end
 end
