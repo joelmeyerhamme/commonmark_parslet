@@ -156,10 +156,10 @@ module CommonMark
   end
 
   class HtmlTransform < Parslet::Transform
-    # rule(inline: subtree(:tree))
-    # rule(hrule: simple(:x)) { '<hr />' }
-    # rule(text: simple(:text)) { "#{text}" }
-    # rule(atx_header: {grade: simple(:grade), inline: sequence(:content)}) { "<h#{grade.size}>#{content.join}</h#{grade.size}>" }
-    # rule(document: sequence(:x)) { x.join("\n") }
+    rule(inline: subtree(:tree))
+    rule(hrule: simple(:x)) { '<hr />' }
+    rule(text: simple(:text)) { "#{text}" }
+    rule(atx_header: {grade: simple(:grade), inline: sequence(:content)}) { "<h#{grade.size}>#{content.join}</h#{grade.size}>" }
+    rule(document: sequence(:x)) { x.join("\n") }
   end
 end
