@@ -45,14 +45,14 @@ module CommonMark
 
     rule :fenced_code_block do
       opt_indent >> fence.capture(:fence) >> str("\n") >>
-        dynamic do |s,c|
+        dynamic do |s, c|
           (str(c.captures[:fence]).absent? >> text >> newline).repeat(1) >> str(c.captures[:fence])
         end.as(:fenced_code_block)
     end
 
     rule :link_ref_def do
       opt_indent >> (str('[') >> (str(']').absent? >> any).repeat.as(:ref) >> str(']:') >> space >>
-        (space.absent? >> any).repeat.as(:destination) >> space >> match['\'"'].capture(:quote) >> dynamic do |s,c|
+        (space.absent? >> any).repeat.as(:destination) >> space >> match['\'"'].capture(:quote) >> dynamic do |s, c|
           (str(c.captures[:quote]).absent? >> any).repeat(1).as(:title) >> str(c.captures[:quote])
         end).as(:ref_def)
     end
@@ -75,14 +75,14 @@ module CommonMark
 
     rule :image do
       (str('![') >> (str(']').absent? >> any).repeat.as(:description) >> str('](') >>
-        (space.absent? >> any).repeat.as(:source) >> (space >> match['\'"'].capture(:quote) >> dynamic do |s,c|
+        (space.absent? >> any).repeat.as(:source) >> (space >> match['\'"'].capture(:quote) >> dynamic do |s, c|
           (str(c.captures[:quote]).absent? >> any).repeat(1).as(:title) >> str(c.captures[:quote])
         end).maybe >> str(')')).as(:image)
     end
 
     rule :link do
       (str('[') >> (str(']').absent? >> any).repeat.as(:text) >> str('](') >>
-        (space.absent? >> any).repeat.as(:destination) >> (space >> match['\'"'].capture(:quote) >> dynamic do |s,c|
+        (space.absent? >> any).repeat.as(:destination) >> (space >> match['\'"'].capture(:quote) >> dynamic do |s, c|
           (str(c.captures[:quote]).absent? >> any).repeat(1).as(:title) >> str(c.captures[:quote])
         end).maybe >> str(')')).as(:link)
     end
@@ -100,7 +100,7 @@ module CommonMark
     end
 
     rule :delimiter_ do
-      str('*').repeat(1,3) | str('_').repeat(1,3)
+      str('*').repeat(1, 3) | str('_').repeat(1, 3)
     end
 
     rule :flank do
@@ -125,7 +125,7 @@ module CommonMark
 
     rule :code_span do
       str('`').repeat(1).capture(:backtick_string) >>
-        dynamic do |s,c|
+        dynamic do |s, c|
           (str(c.captures[:backtick_string]).absent? >> newline.absent? >> any).repeat(1).as(:code_span) >> str(c.captures[:backtick_string])
         end
     end
