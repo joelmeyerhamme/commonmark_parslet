@@ -158,9 +158,8 @@ module CommonMark
   class HtmlTransform < Parslet::Transform
     rule(inline: subtree(:tree))
     rule(setext_header: {inline: sequence(:content), grade: simple(:line)}) do
-      grade = '1' if line =~ /^=+$/
-      grade = '2' if line =~ /^-+$/
-      "<h#{grade}>#{content}</h#{grade}>"
+      grade = line.to_s =~ /^=+$/ ? 1 : 2
+      "<h#{grade}>#{content.join}</h#{grade}>"
     end
     rule(hrule: simple(:x)) { '<hr />' }
     rule(text: simple(:text)) { "#{text}" }
