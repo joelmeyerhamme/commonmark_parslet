@@ -15,38 +15,38 @@ describe CommonMark::Parser do
     end
 
     it 'should parse upto three whitespaces' do
-      expect(subject.parse(' ***')).to   eq({document: [{hrule: '***'}]})
-      expect(subject.parse('  ***')).to  eq({document: [{hrule: '***'}]})
+      expect(subject.parse(' ***')).to eq({document: [{hrule: '***'}]})
+      expect(subject.parse('  ***')).to eq({document: [{hrule: '***'}]})
       expect(subject.parse('   ***')).to eq({document: [{hrule: '***'}]})
     end
 
     it 'should parse spaces' do
-      expect(subject.parse(' - - -')).to                eq(
+      expect(subject.parse(' - - -')).to eq(
         {document: [{hrule: '- - -'}]})
-      expect(subject.parse(' **  * ** * ** * **')).to   eq(
+      expect(subject.parse(' **  * ** * ** * **')).to eq(
         {document: [{hrule: '**  * ** * ** * **'}]})
       expect(subject.parse('-     -      -      -')).to eq(
         {document: [{hrule: '-     -      -      -'}]})
-      expect(subject.parse('- - - -    ')).to           eq(
+      expect(subject.parse('- - - -    ')).to eq(
         {document: [{hrule: '- - - -    '}]})
     end
   end
 
   describe 'header' do
     it 'should parse atx headers' do
-      expect(subject.parse('# foo')).to      eq(
+      expect(subject.parse('# foo')).to eq(
         {document: [{atx_header: {grade: '#', inline: [{text: 'foo'}]}}]})
-      expect(subject.parse('## foo')).to     eq(
+      expect(subject.parse('## foo')).to eq(
         {document: [{atx_header: {grade: '##', inline: [{text: 'foo'}]}}]})
-      expect(subject.parse('### foo')).to    eq(
+      expect(subject.parse('### foo')).to eq(
         {document: [{atx_header: {grade: '###', inline: [{text: 'foo'}]}}]})
-      expect(subject.parse('#### foo')).to   eq(
+      expect(subject.parse('#### foo')).to eq(
         {document: [{atx_header: {grade: '####', inline: [{text: 'foo'}]}}]})
-      expect(subject.parse('##### foo')).to  eq(
+      expect(subject.parse('##### foo')).to eq(
         {document: [{atx_header: {grade: '#####', inline: [{text: 'foo'}]}}]})
       expect(subject.parse('###### foo')).to eq(
         {document: [{atx_header: {grade: '######', inline: [{text: 'foo'}]}}]})
-      expect(subject.parse('#    foo')).to   eq(
+      expect(subject.parse('#    foo')).to eq(
         {document: [{atx_header: {grade: '#', inline: [{text: 'foo'}]}}]})
     end
 
@@ -76,9 +76,9 @@ describe CommonMark::Parser do
   end
 
   it 'should parse paragraphs' do
-    expect(subject.parse('hello world')).to   eq(
+    expect(subject.parse('hello world')).to eq(
       {document: [{inline: [{text: 'hello world'}]}]})
-    expect(subject.parse("hello\nworld")).to  eq(
+    expect(subject.parse("hello\nworld")).to eq(
       {document: [{inline: [{text: 'hello'}]}, {inline: [{text: 'world'}]}]})
     expect(subject.parse("hello \nworld")).to eq(
       {document: [{inline: [{text: 'hello '}]}, {inline: [{text: 'world'}]}]})
@@ -203,14 +203,14 @@ describe CommonMark::HtmlTransform do
     end
 
     it 'should parse spaces' do
-      expect(subject.apply(
-        {document: [{hrule: '- - -'}]})).to                 eq('<hr />')
-      expect(subject.apply(
-        {document: [{hrule: '**  * ** * ** * **'}]})).to    eq('<hr />')
-      expect(subject.apply(
-        {document: [{hrule: '-     -      -      -'}]})).to eq('<hr />')
-      expect(subject.apply(
-        {document: [{hrule: '- - - -    '}]})).to           eq('<hr />')
+      expect(subject.apply({document: [{hrule: '- - -'}]})).
+        to eq('<hr />')
+      expect(subject.apply({document: [{hrule: '**  * ** * ** * **'}]})).
+        to eq('<hr />')
+      expect(subject.apply({document: [{hrule: '-     -      -      -'}]})).
+        to eq('<hr />')
+      expect(subject.apply({document: [{hrule: '- - - -    '}]})).
+        to eq('<hr />')
     end
   end
 

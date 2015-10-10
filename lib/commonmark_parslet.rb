@@ -12,7 +12,8 @@ module CommonMark
     end
 
     rule :setext_header do
-      (opt_indent >> inline >> newline >> opt_indent >> setext_grade).as(:setext_header)
+      (opt_indent >> inline >> newline >>
+        opt_indent >> setext_grade).as(:setext_header)
     end
 
     rule :setext_grade do
@@ -32,7 +33,8 @@ module CommonMark
     end
 
     rule :ordered_list do
-      (opt_indent >> match['\d+'] >> match['\.\)'] >> space >> line).as(:ordered_list)
+      (opt_indent >> match['\d+'] >> match['\.\)'] >>
+        space >> line).as(:ordered_list)
     end
 
     rule :unordered_list do
@@ -40,7 +42,9 @@ module CommonMark
     end
 
     rule :atx_header do
-      opt_indent >> (str('#').repeat(1, 6).as(:grade) >> space.repeat(1) >> inline).as(:atx_header)
+      opt_indent >>
+        (str('#').repeat(1, 6).as(:grade) >>
+          space.repeat(1) >> inline).as(:atx_header)
     end
 
     rule :indented_code do
@@ -50,15 +54,19 @@ module CommonMark
     rule :fenced_code_block do
       opt_indent >> fence.capture(:fence) >> str("\n") >>
         dynamic do |s, c|
-          (str(c.captures[:fence]).absent? >> text >> newline).repeat(1) >> str(c.captures[:fence])
+          (str(c.captures[:fence]).absent? >> text >> newline).repeat(1) >>
+            str(c.captures[:fence])
         end.as(:fenced_code_block)
     end
 
     rule :link_ref_def do
-      opt_indent >> (str('[') >> (str(']').absent? >> any).repeat.as(:ref) >> str(']:') >> space >>
-        (space.absent? >> any).repeat.as(:destination) >> space >> match['\'"'].capture(:quote) >> dynamic do |s, c|
-          (str(c.captures[:quote]).absent? >> any).repeat(1).as(:title) >> str(c.captures[:quote])
-        end).as(:ref_def)
+      opt_indent >> (str('[') >> (str(']').absent? >> any).repeat.as(:ref) >> str(']:') >>
+        space >> (space.absent? >> any).repeat.as(:destination) >>
+          space >> match['\'"'].capture(:quote) >>
+            dynamic do |s, c|
+              (str(c.captures[:quote]).absent? >> any).repeat(1).as(:title) >>
+                str(c.captures[:quote])
+            end).as(:ref_def)
     end
 
     rule :opt_indent do
@@ -70,25 +78,33 @@ module CommonMark
     end
 
     rule :inline do
-      (escaped | entity | code_span | delimiter | link | image | autolink | text).repeat(1).as(:inline)
+      (escaped | entity | code_span | delimiter |
+        link | image | autolink | text).repeat(1).as(:inline)
     end
 
     rule :autolink do
-      (str('<') >> (str('>').absent? >> any).repeat(1).as(:destination) >> str('>')).as(:link)
+      (str('<') >> (str('>').absent? >> any).repeat(1).as(:destination) >>
+        str('>')).as(:link)
     end
 
     rule :image do
       (str('![') >> (str(']').absent? >> any).repeat.as(:description) >> str('](') >>
-        (space.absent? >> any).repeat.as(:source) >> (space >> match['\'"'].capture(:quote) >> dynamic do |s, c|
-          (str(c.captures[:quote]).absent? >> any).repeat(1).as(:title) >> str(c.captures[:quote])
-        end).maybe >> str(')')).as(:image)
+        (space.absent? >> any).repeat.as(:source) >>
+          (space >> match['\'"'].capture(:quote) >>
+            dynamic do |s, c|
+              (str(c.captures[:quote]).absent? >> any).repeat(1).as(:title) >>
+                str(c.captures[:quote])
+              end).maybe >> str(')')).as(:image)
     end
 
     rule :link do
       (str('[') >> (str(']').absent? >> any).repeat.as(:text) >> str('](') >>
-        (space.absent? >> any).repeat.as(:destination) >> (space >> match['\'"'].capture(:quote) >> dynamic do |s, c|
-          (str(c.captures[:quote]).absent? >> any).repeat(1).as(:title) >> str(c.captures[:quote])
-        end).maybe >> str(')')).as(:link)
+        (space.absent? >> any).repeat.as(:destination) >>
+          (space >> match['\'"'].capture(:quote) >>
+            dynamic do |s, c|
+              (str(c.captures[:quote]).absent? >> any).repeat(1).as(:title) >>
+                str(c.captures[:quote])
+            end).maybe >> str(')')).as(:link)
     end
 
     rule :delimiter do
@@ -130,7 +146,8 @@ module CommonMark
     rule :code_span do
       str('`').repeat(1).capture(:backtick_string) >>
         dynamic do |s, c|
-          (str(c.captures[:backtick_string]).absent? >> newline.absent? >> any).repeat(1).as(:code_span) >> str(c.captures[:backtick_string])
+          (str(c.captures[:backtick_string]).absent? >> newline.absent? >>
+            any).repeat(1).as(:code_span) >> str(c.captures[:backtick_string])
         end
     end
 
