@@ -12,7 +12,11 @@ module CommonMark
     end
 
     rule :setext_header do
-      (opt_indent >> inline >> newline >> opt_indent >> (str('=').repeat(1) | str('-').repeat(1)).as(:grade)).as(:setext_header)
+      (opt_indent >> inline >> newline >> opt_indent >> setext_grade).as(:setext_header)
+    end
+
+    rule :setext_grade do
+      str('=').repeat(1).as(:grade_1) | str('-').repeat(1).as(:grade_2)
     end
 
     rule :blank do
@@ -157,9 +161,11 @@ module CommonMark
 
   class HtmlTransform < Parslet::Transform
     rule(inline: subtree(:tree))
-    rule(setext_header: {inline: sequence(:content), grade: simple(:line)}) do
-      grade = line.to_s =~ /^=+$/ ? 1 : 2
-      "<h#{grade}>#{content.join}</h#{grade}>"
+    rule(setext_header: {inline: sequence(:content), grade_1: simple(:grade_1)}) do
+      "<h1>#{content.join}</h1>"
+    end
+    rule(setext_header: {inline: sequence(:content), grade_2: simple(:grade_2)}) do
+      "<h2>#{content.join}</h2>"
     end
     rule(hrule: simple(:x)) { '<hr />' }
     rule(text: simple(:text)) { "#{text}" }

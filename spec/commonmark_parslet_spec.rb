@@ -40,8 +40,8 @@ describe CommonMark::Parser do
     end
 
     it 'should parse setext headers' do
-      expect(subject.parse("Foo bar\n=========")).to eq({document: [{setext_header: {inline: [{text: 'Foo bar'}], grade: '========='}}]})
-      expect(subject.parse("Foo bar\n---------")).to eq({document: [{setext_header: {inline: [{text: 'Foo bar'}], grade: '---------'}}]})
+      expect(subject.parse("Foo bar\n=========")).to eq({document: [{setext_header: {inline: [{text: 'Foo bar'}], grade_1: '========='}}]})
+      expect(subject.parse("Foo bar\n---------")).to eq({document: [{setext_header: {inline: [{text: 'Foo bar'}], grade_2: '---------'}}]})
     end
   end
 
