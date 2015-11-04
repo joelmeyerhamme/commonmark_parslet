@@ -9,7 +9,7 @@ GEM
   remote: https://rubygems.org/
   specs:
     addressable (2.3.8)
-    backports (3.6.6)
+    backports (3.6.7)
     binding_of_caller (0.7.2)
       debug_inspector (>= 0.0.1)
     blankslate (2.1.2.4)
@@ -55,7 +55,7 @@ GEM
     multipart-post (2.0.0)
     net-http-persistent (2.9.4)
     net-http-pipeline (1.0.1)
-    netrc (0.10.3)
+    netrc (0.11.0)
     pry (0.9.12.6)
       coderay (~> 1.0)
       method_source (~> 0.8)
