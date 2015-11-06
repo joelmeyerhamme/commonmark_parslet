@@ -5,7 +5,7 @@ gem 'parslet' , :git => 'https://github.com/NigelThorne/parslet.git'
 group 'develop' do
   gem 'travis'
   gem 'byebug'
-  gem 'pry-rescue'
+  gem 'pry-rescue', github: 'ConradIrwin/pry-rescue', ref: :master
   gem 'pry-stack_explorer'
   gem 'yard'
 end

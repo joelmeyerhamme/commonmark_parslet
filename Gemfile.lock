@@ -1,4 +1,13 @@
 GIT
+  remote: git://github.com/ConradIrwin/pry-rescue.git
+  revision: b4bc69f63cee8e0b1f79dd63737147b43724c3ae
+  ref: master
+  specs:
+    pry-rescue (1.4.3)
+      interception (>= 0.5)
+      pry
+
+GIT
   remote: https://github.com/NigelThorne/parslet.git
   revision: be698466bfa21a35d838fc7d3cd741b8aa1977b0
   specs:
@@ -13,7 +22,7 @@ GEM
     binding_of_caller (0.7.2)
       debug_inspector (>= 0.0.1)
     blankslate (2.1.2.4)
-    byebug (7.0.0)
+    byebug (8.0.0)
     codeclimate-test-reporter (0.4.8)
       simplecov (>= 0.7.1, < 1.0.0)
     coderay (1.1.0)
@@ -60,9 +69,6 @@ GEM
       coderay (~> 1.0)
       method_source (~> 0.8)
       slop (~> 3.4)
-    pry-rescue (1.4.2)
-      interception (>= 0.5)
-      pry
     pry-stack_explorer (0.4.9.2)
       binding_of_caller (>= 0.7)
       pry (>= 0.9.11)
@@ -123,7 +129,7 @@ DEPENDENCIES
   codeclimate-test-reporter
   coveralls
   parslet!
-  pry-rescue
+  pry-rescue!
   pry-stack_explorer
   rspec
   simplecov
