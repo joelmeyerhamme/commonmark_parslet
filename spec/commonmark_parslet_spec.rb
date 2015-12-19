@@ -86,15 +86,18 @@ describe CommonMark::Parser do
 
   describe 'should parse blank lines' do
     it 'should parse spaces' do
-      expect(subject.parse('  ')).to   eq({document: [{blank: '  '}]})
+      expect(subject.parse(' ')).to    eq({document: [{blank: ' '}]})
       expect(subject.parse('   ')).to  eq({document: [{blank: '   '}]})
       expect(subject.parse('    ')).to eq({document: [{blank: '    '}]})
     end
 
-    it 'should parse empty lines with newline' do
-      # pending 'newlines not implemented'
+    it 'should parse empty lines' do
+      pending 'newlines not implemented'
       expect(subject.parse("\n")).to eq({document: [{blank: ''}]})
-      expect(subject.parse("hello\n\nworld")).to eq({document: [{blank: '    '}]})
+    end
+
+    it 'should parse itermediary empty lines' do
+      expect(subject.parse("hello\n\nworld")).to eq({document: [{blank: '    '}]})      
     end
   end
 
@@ -117,11 +120,10 @@ describe CommonMark::Parser do
   it 'should parse ordered lists' do
     expect(subject.parse("- hello\n- world")).to eq(
       {document: [
-        {unordered_list: [
-          {inline: [{text: 'hello'}]},
-          {inline: [{text: 'world'}]}
-        ]}
-      ]})
+        {unordered_list: 
+          {inline: [{text: 'hello'}]}},
+        {unordered_list: 
+          {inline: [{text: 'world'}]}}]})
   end
 
   it 'should parse backslash escaped characters' do

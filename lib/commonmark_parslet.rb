@@ -3,12 +3,12 @@ module CommonMark
     root :document
 
     rule :document do
-      line.repeat.as(:document)
+      ((line >> newline.repeat(1)).repeat | newline).as(:document)
     end
 
     rule :line do
       fenced_code_block | setext_header | hrule | atx_header | quote | list |
-        indented_code | link_ref_def | inline >> newline )
+        indented_code | link_ref_def | inline | blank
     end
 
     rule :setext_header do
@@ -21,8 +21,14 @@ module CommonMark
     end
 
     rule :quote do
-      (opt_indent >> str('>') >> space.maybe >> line).as(:quote) >> newline
+      (opt_indent >> str('>') >> space.maybe >> line).as(:quote)
     end
+
+    rule :blank do
+      # (space.repeat(1) >> str("\n").absent?).as(:blank)
+      (space.repeat(1)).as(:blank)
+    end
+
 
     rule :list do
       ordered_list | unordered_list
@@ -34,25 +40,17 @@ module CommonMark
     end
 
     rule :unordered_list do
-      (unordered_item >> newline.repeat(1, 2)).repeat(1).as(:unordered_list)
-    end
-
-    rule :unordered_item do
-      unordered_header >> space >> inline
-    end
-
-    rule :unordered_header do
-      opt_indent >> match['-+*']
+      (opt_indent >> match['-+*'] >> space >> inline).as(:unordered_list)
     end
 
     rule :atx_header do
       opt_indent >>
         (str('#').repeat(1, 6).as(:grade) >>
-          space.repeat(1) >> inline).as(:atx_header) >> newline
+          space.repeat(1) >> inline).as(:atx_header)
     end
 
     rule :indented_code do
-      space.repeat(4) >> text.as(:indented_code) >> newline
+      space.repeat(4) >> text.as(:indented_code)
     end
 
     rule :fenced_code_block do
@@ -60,7 +58,7 @@ module CommonMark
         dynamic do |s, c|
           (str(c.captures[:fence]).absent? >> text >> newline).repeat(1) >>
             str(c.captures[:fence])
-        end.as(:fenced_code_block) >> newline
+        end.as(:fenced_code_block)
     end
 
     rule :link_ref_def do
@@ -70,7 +68,7 @@ module CommonMark
             dynamic do |s, c|
               (str(c.captures[:quote]).absent? >> any).repeat(1).as(:title) >>
                 str(c.captures[:quote])
-            end).as(:ref_def) >> newline
+            end).as(:ref_def)
     end
 
     rule :opt_indent do
@@ -176,7 +174,7 @@ module CommonMark
     end
 
     rule :hrule do
-      opt_indent >> (hrule_('*') | hrule_('-') | hrule_('_')).as(:hrule) >> newline
+      opt_indent >> (hrule_('*') | hrule_('-') | hrule_('_')).as(:hrule)
     end
 
     def hrule_(char)
