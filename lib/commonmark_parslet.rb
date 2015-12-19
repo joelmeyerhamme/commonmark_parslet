@@ -168,7 +168,7 @@ module CommonMark
     end
 
     rule :newline do
-      any.absent? | str("\n")
+      hard_break.maybe >> any.absent? | str("\n")
     end
 
     rule :hard_break do
