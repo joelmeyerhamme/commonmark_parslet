@@ -3,7 +3,7 @@ module CommonMark
     root :document
 
     rule :document do
-      (line >> newline).repeat.as(:document)
+      (line >> newline.maybe).repeat.as(:document)
     end
 
     rule :line do
@@ -13,7 +13,7 @@ module CommonMark
 
     rule :setext_header do
       (opt_indent >> inline >> newline >>
-        opt_indent >> setext_grade).as(:setext_header)
+        opt_indent >> setext_grade).as(:setext_header) >> newline
     end
 
     rule :setext_grade do
@@ -38,7 +38,15 @@ module CommonMark
     end
 
     rule :unordered_list do
-      (opt_indent >> match['-+*'] >> space >> line).as(:unordered_list)
+      (unordered_item >> newline).repeat(1).as(:unordered_list)
+    end
+
+    rule :unordered_item do
+      unordered_header >> space >> inline
+    end
+
+    rule :unordered_header do
+      opt_indent >> match['-+*']
     end
 
     rule :atx_header do
@@ -160,7 +168,11 @@ module CommonMark
     end
 
     rule :newline do
-      str('  ').as(:hard_break).maybe >> (str("\n") | any.absent?)
+      any.absent? | str("\n")
+    end
+
+    rule :hard_break do
+      str('  ').as(:hard_break)
     end
 
     rule :space do
