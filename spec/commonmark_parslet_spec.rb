@@ -92,7 +92,7 @@ describe CommonMark::Parser do
     end
 
     it 'should parse empty lines with newline' do
-      pending 'newlines not implemented'
+      # pending 'newlines not implemented'
       expect(subject.parse("\n")).to eq({document: [{blank: ''}]})
       expect(subject.parse("hello\n\nworld")).to eq({document: [{blank: '    '}]})
     end
