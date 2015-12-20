@@ -92,12 +92,15 @@ describe CommonMark::Parser do
     end
 
     it 'should parse empty lines' do
-      pending 'newlines not implemented'
-      expect(subject.parse("\n")).to eq({document: [{blank: ''}]})
+      expect(subject.parse("\n")).to eq({document: [{blank: []}]})
     end
 
     it 'should parse itermediary empty lines' do
-      expect(subject.parse("hello\n\nworld")).to eq({document: [{blank: '    '}]})      
+      expect(subject.parse("hello\n\nworld")).to eq(
+        {document: [
+          {inline:[{text:"hello"}]}, 
+          {blank:"\n"},
+          {inline:[{text:"world"}]}]})
     end
   end
 
@@ -145,8 +148,8 @@ describe CommonMark::Parser do
   end
 
   it 'should parse emphasis' do
-    expect(subject.parse('*hello*')).to eq({document: [{:inline=>[
-      {:left_delimiter=>"*"}, {:text=>"hello"}, {:right_delimiter=>"*"}]}]})
+    expect(subject.parse('*hello*')).to eq({document: [{inline:[
+      {:left_delimiter=>"*"}, {text:"hello"}, {:right_delimiter=>"*"}]}]})
   end
 
   it 'should parse strong emphasis' do
@@ -170,8 +173,10 @@ describe CommonMark::Parser do
   end
 
   it 'should parse hard breaks' do
-    expect(subject.parse('text  ')).to eq(
-      {document: [{inline: [{text: 'text'}], hard_break: '  '}]})
+    # expect(subject.parse('text  ')).to eq(
+    #   {document: [{inline: [{text: 'text'}], hard_break: '  '}]})
+    expect(subject.parse("text  \ntext")).to eq(
+      {document: [{inline: [{text: 'text'}], hard_break: '  '}, {inline: [{text: 'text'}]}]})
   end
 
   it 'should parse plain text' do

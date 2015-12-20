@@ -3,17 +3,17 @@ module CommonMark
     root :document
 
     rule :document do
-      ((line >> newline.repeat(1)).repeat | newline).as(:document)
+      any.absent?.as(:blank) | (line >> newline).repeat.as(:document)
     end
 
     rule :line do
-      fenced_code_block | setext_header | hrule | atx_header | quote | list |
+       fenced_code_block | setext_header | hrule | atx_header | quote | list |
         indented_code | link_ref_def | inline | blank
     end
 
     rule :setext_header do
       (opt_indent >> inline >> newline >>
-        opt_indent >> setext_grade).as(:setext_header) >> newline.repeat(2, 2)
+        opt_indent >> setext_grade).as(:setext_header)
     end
 
     rule :setext_grade do
@@ -25,8 +25,7 @@ module CommonMark
     end
 
     rule :blank do
-      # (space.repeat(1) >> str("\n").absent?).as(:blank)
-      (space.repeat(1)).as(:blank)
+      space.repeat.as(:blank) >> line_feed | space.repeat(1).as(:blank)
     end
 
 
@@ -162,11 +161,15 @@ module CommonMark
     end
 
     rule :newline do
-      hard_break.maybe >> (any.absent? | str("\n"))
+      any.absent? | line_feed
+    end
+
+    rule :line_feed do
+      hard_break.maybe >> str("\n")
     end
 
     rule :hard_break do
-      str('  ').as(:hard_break)
+      space.repeat(2, 2).as(:hard_break)
     end
 
     rule :space do
