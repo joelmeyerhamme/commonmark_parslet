@@ -92,7 +92,7 @@ describe CommonMark::Parser do
     end
 
     it 'should parse empty lines' do
-      expect(subject.parse("\n")).to eq({document: [{blank: []}]})
+      expect(subject.parse("\n")).to eq({document: [{blank: "\n"}]})
     end
 
     it 'should parse itermediary empty lines' do
@@ -120,7 +120,7 @@ describe CommonMark::Parser do
         {ordered_list: {inline: [{text: 'world'}]}}]})
   end
 
-  it 'should parse ordered lists' do
+  it 'should parse unordered lists' do
     expect(subject.parse("- hello\n- world")).to eq(
       {document: [
         {unordered_list: 

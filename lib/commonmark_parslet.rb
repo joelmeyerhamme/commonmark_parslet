@@ -3,12 +3,12 @@ module CommonMark
     root :document
 
     rule :document do
-      any.absent?.as(:blank) | (line >> newline).repeat.as(:document)
+      any.absent?.as(:blank) | (line >> newline | blank).repeat.as(:document)
     end
 
     rule :line do
-       fenced_code_block | setext_header | hrule | atx_header | quote | list |
-        indented_code | link_ref_def | inline | blank
+      fenced_code_block | hrule | atx_header | quote | list |
+        indented_code | link_ref_def | setext_header | inline
     end
 
     rule :setext_header do
@@ -25,9 +25,8 @@ module CommonMark
     end
 
     rule :blank do
-      space.repeat.as(:blank) >> line_feed | space.repeat(1).as(:blank)
+      line_feed.repeat(1).as(:blank) | space.repeat.as(:blank) >> line_feed | space.repeat(1).as(:blank)
     end
-
 
     rule :list do
       ordered_list | unordered_list
