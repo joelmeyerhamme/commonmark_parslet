@@ -187,7 +187,7 @@ module CommonMark
   class HtmlTransform < Parslet::Transform
     rule("\u0000") { "\ufffd" }
 
-    rule(inline: subtree(:tree))
+    rule(inline: sequence(:line)) { line.join }
 
     rule(setext_header: {inline: sequence(:content), grade_1: simple(:grade_1)}) do
       "<h1>#{content.join}</h1>"
