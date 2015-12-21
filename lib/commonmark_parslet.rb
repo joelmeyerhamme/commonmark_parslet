@@ -185,6 +185,8 @@ module CommonMark
   end
 
   class HtmlTransform < Parslet::Transform
+    rule("\u0000") { "\ufffd" }
+
     rule(inline: subtree(:tree))
 
     rule(setext_header: {inline: sequence(:content), grade_1: simple(:grade_1)}) do
