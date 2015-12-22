@@ -62,7 +62,7 @@ describe CommonMark::Parser do
 
   it 'should parse indented code blocks' do
     expect(subject.parse("    code block")).to eq(
-      {document: [{indented_code: {text: 'code block'}}]})
+      {document: [{indented_code: [{text: 'code block'}]}]})
   end
 
   it 'should parse fenced code blocks' do
@@ -77,11 +77,11 @@ describe CommonMark::Parser do
 
   it 'should parse paragraphs' do
     expect(subject.parse('hello world')).to eq(
-      {document: [{inline: [{text: 'hello world'}]}]})
+      {document: [{paragraph: [{inline: [{text: 'hello world'}]}]}]})
     expect(subject.parse("hello\nworld")).to eq(
-      {document: [{inline: [{text: 'hello'}]}, {inline: [{text: 'world'}]}]})
+      {document: [{paragraph: [{inline: [{text: 'hello'}]}, {inline: [{text: 'world'}]}]}]})
     expect(subject.parse("hello \nworld")).to eq(
-      {document: [{inline: [{text: 'hello '}]}, {inline: [{text: 'world'}]}]})
+      {document: [{paragraph: [{inline: [{text: 'hello '}]}, {inline: [{text: 'world'}]}]}]})
   end
 
   describe 'should parse blank lines' do
@@ -106,11 +106,10 @@ describe CommonMark::Parser do
 
   it 'should parse block quotes' do
     expect(subject.parse('> hello world')).to eq(
-      {document: [{quote: {inline: [{text: 'hello world'}]}}]})
+      {document: [{quote: [{paragraph: [{inline: [{text: 'hello world'}]}]}]}]})
     expect(subject.parse("> hello world\n> hello world")).to eq(
       {document: [
-        {quote: {inline: [{text: 'hello world'}]}},
-        {quote: {inline: [{text: 'hello world'}]}}]})
+        {quote: [{paragraph: [{inline: [{text: 'hello world'}]}, {inline: [{text: 'hello world'}]}]}]}]})
   end
 
   it 'should parse ordered lists' do
@@ -204,6 +203,7 @@ describe CommonMark::HtmlTransform do
       end
 
       it 'should be treated as 4 spaces' do
+        pending "blocks"
         expect(process "  - foo\n\n\tbar").to eq "<ul>\n<li>\n<p>foo</p>\n<p>bar</p>\n</li>\n</ul>"
         expect(process ">\tfoo\tbar").to eq "<blockquote>\n<p>foo\tbar</p>\n</blockquote>"
         expect(process "    foo\n\tbar").to eq "<pre><code>foo\nbar\n</code></pre>"
@@ -219,6 +219,7 @@ describe CommonMark::HtmlTransform do
 
   describe 'precedence' do
     it 'should parse blocks first' do
+      pending "blocks"
       expect(process "- `one\n- two`").to eq "<ul>\n<li>`one</li>\n<li>two`</li>\n</ul>"
     end
   end

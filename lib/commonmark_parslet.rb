@@ -3,12 +3,18 @@ module CommonMark
     root :document
 
     rule :document do
-      any.absent?.as(:blank) | (line >> newline | blank).repeat.as(:document)
+      any.absent?.as(:blank) | (line | blank).repeat.as(:document)
     end
 
     rule :line do
-      fenced_code_block | hrule | atx_header | quote | list |
-        indented_code | link_ref_def | setext_header | inline
+      # dynamic { |s,c| str(c.captures[:marker]) } >>
+        # scope {
+          (fenced_code_block | hrule | atx_header) >> newline | quote | (list |
+            indented_code | link_ref_def | setext_header) >> newline | paragraph # }
+    end
+
+    rule :paragraph do
+      (inline.repeat(1) >> newline).repeat(1).as(:paragraph)
     end
 
     rule :setext_header do
@@ -21,7 +27,7 @@ module CommonMark
     end
 
     rule :quote do
-      (opt_indent >> str('>') >> space.maybe >> line).as(:quote)
+      ((opt_indent >> str('>')).capture(:marker) >> space.maybe >> line >> newline).repeat(1).as(:quote)
     end
 
     rule :blank do
@@ -38,8 +44,12 @@ module CommonMark
     end
 
     rule :unordered_list do
-      (opt_indent >> match['-+*'] >> space >> inline).as(:unordered_list)
+      (opt_indent >> match['-+*'] >> space >> inline).as(:unordered_list) # >>
     end
+
+    # rule :unordered_list_marker do
+    #   (opt_indent >> match['-+*'] >> space.repeat(1)).capture(:unordered_list_marker)
+    # end
 
     rule :atx_header do
       opt_indent >>
@@ -48,7 +58,11 @@ module CommonMark
     end
 
     rule :indented_code do
-      space.repeat(4) >> text.as(:indented_code)
+      (tab >> text >> newline).repeat(1).as(:indented_code)
+    end
+
+    rule :tab do
+      str("\t") | space.repeat(4, 4)
     end
 
     rule :fenced_code_block do
@@ -201,9 +215,13 @@ module CommonMark
 
     rule(text: simple(:text)) { "#{text}" }
 
+    rule(paragraph: sequence(:lines)) { "<p>#{lines.join("\n")}</p>"}
+
     rule(atx_header: {grade: simple(:grade), inline: sequence(:content)}) do
       "<h#{grade.size}>#{content.join}</h#{grade.size}>"
     end
+
+    rule(indented_code: sequence(:code)) { "<pre><code>#{code.join("\n")}\n</code></pre>" }
 
     rule(document: sequence(:x)) { x.join("\n") }
   end
