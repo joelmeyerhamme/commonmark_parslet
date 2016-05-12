@@ -6,3 +6,6 @@ Bundler.require(:test, :develop)
 require 'parslet/rig/rspec'
 require 'parslet/convenience'
 
+RSpec.configure do |c|
+  c.example_status_persistence_file_path = "rspec_examples.log"
+end

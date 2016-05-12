@@ -98,7 +98,7 @@ describe CommonMark::Parser do
     it 'should parse itermediary empty lines' do
       expect(subject.parse("hello\n\nworld")).to eq(
         {document: [
-          {inline:[{text:"hello"}]}, 
+          {inline:[{text:"hello"}]},
           {blank:"\n"},
           {inline:[{text:"world"}]}]})
     end
@@ -122,9 +122,9 @@ describe CommonMark::Parser do
   it 'should parse unordered lists' do
     expect(subject.parse("- hello\n- world")).to eq(
       {document: [
-        {unordered_list: 
+        {unordered_list:
           {inline: [{text: 'hello'}]}},
-        {unordered_list: 
+        {unordered_list:
           {inline: [{text: 'world'}]}}]})
   end
 
@@ -289,7 +289,7 @@ describe CommonMark::HtmlTransform do
         expect(process "- Foo\n- * * *").to eq "<ul>\n<li>Foo</li>\n<li>\n<hr />\n</li>\n</ul>"
       end
     end
-  
+
     describe 'headers' do
       describe 'atx headers' do
         it 'should parse atx headers' do

@@ -9,13 +9,13 @@ module CommonMark
     rule :line do
       # dynamic { |s,c| str(c.captures[:marker]) } >>
         # scope {
-          (fenced_code_block | hrule | atx_header) >> newline | quote | (list |
-            indented_code | link_ref_def | setext_header) >> newline | paragraph # }
+      (fenced_code_block | hrule | atx_header) >> newline | quote | (list |
+        indented_code | link_ref_def | setext_header) >> newline #} # | paragraph # }
     end
 
-    rule :paragraph do
-      (inline.repeat(1) >> newline).repeat(1).as(:paragraph)
-    end
+    # rule :paragraph do
+    #   (inline.repeat(1) >> newline).repeat(1).as(:paragraph)
+    # end
 
     rule :setext_header do
       (opt_indent >> inline >> newline >>
@@ -27,11 +27,16 @@ module CommonMark
     end
 
     rule :quote do
-      ((opt_indent >> str('>')).capture(:marker) >> space.maybe >> line >> newline).repeat(1).as(:quote)
+      (marker >> space.maybe >> line >> newline).repeat(1).as(:quote)
+    end
+
+    rule :marker do
+      (opt_indent >> str('>')).capture(:marker)
     end
 
     rule :blank do
-      line_feed.repeat(1).as(:blank) | space.repeat.as(:blank) >> line_feed | space.repeat(1).as(:blank)
+      # line_feed.repeat(1).as(:blank) | space.repeat.as(:blank) >> line_feed | space.repeat(1).as(:blank)
+      space.repeat >> line_feed.repeat(1) | space.repeat(1) >> line_feed.repeat(0)
     end
 
     rule :list do
