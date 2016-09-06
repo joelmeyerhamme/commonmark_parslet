@@ -75,9 +75,12 @@ describe CommonMark::Parser do
       {document: [{ref_def: {ref: 'foo', destination: '/url', title: 'title'}}]})
   end
 
-  it 'should parse paragraphs' do
+  it 'should parse single line paragraphs' do
     expect(subject.parse('hello world')).to eq(
       {document: [{paragraph: [{inline: [{text: 'hello world'}]}]}]})
+  end
+
+  it 'should parse multi line paragraphs' do
     expect(subject.parse("hello\nworld")).to eq(
       {document: [{paragraph: [{inline: [{text: 'hello'}]}, {inline: [{text: 'world'}]}]}]})
     expect(subject.parse("hello \nworld")).to eq(

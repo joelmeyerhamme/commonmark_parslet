@@ -7,15 +7,21 @@ module CommonMark
     end
 
     rule :line do
-      # dynamic { |s,c| str(c.captures[:marker]) } >>
-        # scope {
-      (fenced_code_block | hrule | atx_header) >> newline | quote | (list |
-        indented_code | link_ref_def | setext_header) >> newline #} # | paragraph # }
+      fenced_code_block |
+      hrule |
+      atx_header |
+      quote |
+      list |
+      indented_code |
+      link_ref_def |
+      setext_header |
+      paragraph >>
+      newline
     end
 
-    # rule :paragraph do
-    #   (inline.repeat(1) >> newline).repeat(1).as(:paragraph)
-    # end
+    rule :paragraph do
+      (inline >> (newline >> inline).repeat).as(:paragraph)
+    end
 
     rule :setext_header do
       (opt_indent >> inline >> newline >>
