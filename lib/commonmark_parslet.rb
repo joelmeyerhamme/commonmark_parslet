@@ -30,7 +30,7 @@ module CommonMark
     rule :line do
       dynamic do |s, c|
         begin
-          str(c.captures[:marker]) >> scope { line }
+          str(c.captures[:marker]) >> scope { inline } # TODO: should be line, recursing quote levels
         rescue Parslet::Scope::NotFound => e
           any.present? >> inline
         end
@@ -47,7 +47,7 @@ module CommonMark
     end
 
     rule :quote do
-      ((marker >> space.maybe).capture(:marker) >> block).as(:quote)
+      ((marker >> space.maybe).capture(:marker) >> block.repeat(1)).as(:quote)
     end
 
     rule :marker do
