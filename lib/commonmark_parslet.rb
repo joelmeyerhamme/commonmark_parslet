@@ -3,10 +3,10 @@ module CommonMark
     root :document
 
     rule :document do
-      any.absent?.as(:blank) | (line | blank).repeat.as(:document)
+      any.absent?.as(:blank) | (block | blank).repeat.as(:document)
     end
 
-    rule :line do
+    rule :block do
       fenced_code_block |
       hrule |
       atx_header |
@@ -19,8 +19,22 @@ module CommonMark
       newline
     end
 
+    def block_repeat(body, delimiter, secondary=body)
+      (body.repeat(1,1) >> (delimiter >> secondary).repeat)
+    end
+
     rule :paragraph do
-      (inline >> (newline >> inline).repeat).as(:paragraph)
+      block_repeat(inline, newline, line).as(:paragraph)
+    end
+
+    rule :line do
+      dynamic do |s, c|
+        begin
+          str(c.captures[:marker]) >> scope { line }
+        rescue Parslet::Scope::NotFound => e
+          any.present? >> inline
+        end
+      end
     end
 
     rule :setext_header do
@@ -33,16 +47,15 @@ module CommonMark
     end
 
     rule :quote do
-      (marker >> space.maybe >> line >> newline).repeat(1).as(:quote)
+      ((marker >> space.maybe).capture(:marker) >> block).as(:quote)
     end
 
     rule :marker do
-      (opt_indent >> str('>')).capture(:marker)
+      (opt_indent >> str('>'))
     end
 
     rule :blank do
-      # line_feed.repeat(1).as(:blank) | space.repeat.as(:blank) >> line_feed | space.repeat(1).as(:blank)
-      space.repeat >> line_feed.repeat(1) | space.repeat(1) >> line_feed.repeat(0)
+      (space.repeat >> line_feed.repeat(1) | space.repeat(1) >> line_feed.repeat(0)).as(:blank)
     end
 
     rule :list do
@@ -51,7 +64,7 @@ module CommonMark
 
     rule :ordered_list do
       (opt_indent >> match['\d+'] >> match['\.\)'] >>
-        space >> line).as(:ordered_list)
+        space >> block).as(:ordered_list)
     end
 
     rule :unordered_list do
@@ -212,7 +225,7 @@ module CommonMark
   class HtmlTransform < Parslet::Transform
     rule("\u0000") { "\ufffd" }
 
-    rule(inline: sequence(:line)) { line.join }
+    rule(inline: sequence(:block)) { block.join }
 
     rule(setext_header: {inline: sequence(:content), grade_1: simple(:grade_1)}) do
       "<h1>#{content.join}</h1>"
