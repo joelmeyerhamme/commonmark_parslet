@@ -26,9 +26,8 @@ module CommonMark
     end
 
     rule :paragraph do
-      # (((inline >> newline).repeat(1) >> inline) | inline.repeat(1,1)).as(:paragraph)
-      (((inline >> newline).repeat(1,1) >> inline) # TODO: fails with repeat(1, nil)
-        ).as(:paragraph)
+      (((inline >> newline).repeat(1) >> inline) | inline.repeat(1,1)).as(:paragraph)
+      # (((inline >> newline).repeat(1,1) >> inline)).as(:paragraph) # TODO: fails with repeat(1, nil)
     end
 
     rule :line do
@@ -119,9 +118,8 @@ module CommonMark
     end
 
     rule :inline do
-      # (escaped | entity | code_span | delimiter |
-        # link | image | autolink |
-        (text).repeat(1).as(:inline) >> hard_break.maybe
+      (escaped | entity | code_span | delimiter |
+        link | image | autolink | text).repeat(1).as(:inline) >> hard_break.maybe
     end
 
     rule :autolink do

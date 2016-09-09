@@ -81,6 +81,7 @@ describe CommonMark::Parser do
   end
 
   it 'should parse multi line paragraphs' do
+    pending 'fixed unbalanced repeats'
     expect(subject.parse_with_debug("hello\nworld")).to eq(
       {document: [{paragraph: [{inline: [{text: 'hello'}]}, {inline: [{text: 'world'}]}]}]})
     expect(subject.parse_with_debug("hello \nworld")).to eq(
@@ -113,6 +114,7 @@ describe CommonMark::Parser do
   end
 
   it 'should parse multi block quotes' do
+    pending 'fixed unbalanced repeats'
     expect(subject.parse_with_debug("> hello world\n> hello world")).to eq(
       {document: [
         {quote: [{paragraph: [{inline: [{text: 'hello world'}]}, {inline: [{text: 'hello world'}]}]}]}]})
@@ -127,12 +129,12 @@ describe CommonMark::Parser do
   end
 
   it 'should parse unordered lists' do
+    pending 'fixed unbalanced repeats'
     expect(subject.parse_with_debug("- hello\n- world")).to eq(
       {document: [
-        {unordered_list:
-          {inline: [{text: 'hello'}]}},
-        {unordered_list:
-          {inline: [{text: 'world'}]}}]})
+        {unordered_list:[
+          {inline: [{text: 'hello'}]},
+          {inline: [{text: 'world'}]}]}]})
   end
 
   it 'should parse backslash escaped characters' do
@@ -179,6 +181,7 @@ describe CommonMark::Parser do
   end
 
   it 'should parse hard breaks' do
+    pending 'fixed unbalanced repeats'
     expect(subject.parse_with_debug("hello  \nworld")).to eq(
       {document: [{paragraph: [{inline: [{text: 'hello'}], hard_break: '  '}, {inline: [{text: 'world'}]}]}]})
   end
