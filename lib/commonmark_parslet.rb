@@ -63,8 +63,7 @@ module CommonMark
     end
 
     rule :ordered_list do
-      (opt_indent >> match['\d+'] >> match['\.\)'] >>
-        space >> block).as(:ordered_list)
+      ((opt_indent >> match['\d+'] >> match['\.\)'] >> space) >> inline >> newline).repeat(1).as(:ordered_list)
     end
 
     rule :unordered_list do
