@@ -179,8 +179,8 @@ describe CommonMark::Parser do
   end
 
   it 'should parse hard breaks' do
-    expect(subject.parse_with_debug("text  \ntext")).to eq(
-      {document: [{paragraph: [{inline: [{text: 'text'}], hard_break: '  '}, {inline: [{text: 'text'}]}]}]})
+    expect(subject.parse_with_debug("hello  \nworld")).to eq(
+      {document: [{paragraph: [{inline: [{text: 'hello'}], hard_break: '  '}, {inline: [{text: 'world'}]}]}]})
   end
 
   it 'should parse plain text' do

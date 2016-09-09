@@ -1,3 +1,5 @@
+require 'byebug'
+
 module CommonMark
   class Parser < Parslet::Parser
     root :document
@@ -20,11 +22,13 @@ module CommonMark
     end
 
     def block_repeat(body, delimiter, secondary=body)
-      (body.repeat(1,1) >> (delimiter >> secondary).repeat)
+      ((body >> delimiter).repeat(1) >> secondary) | body.repeat(1,1)
     end
 
     rule :paragraph do
-      block_repeat(inline, newline, line).as(:paragraph)
+      # (((inline >> newline).repeat(1) >> inline) | inline.repeat(1,1)).as(:paragraph)
+      (((inline >> newline).repeat(1,1) >> inline) # TODO: fails with repeat(1, nil)
+        ).as(:paragraph)
     end
 
     rule :line do
@@ -115,8 +119,9 @@ module CommonMark
     end
 
     rule :inline do
-      (escaped | entity | code_span | delimiter |
-        link | image | autolink | text).repeat(1).as(:inline)
+      # (escaped | entity | code_span | delimiter |
+        # link | image | autolink |
+        (text).repeat(1).as(:inline) >> hard_break.maybe
     end
 
     rule :autolink do
@@ -193,7 +198,7 @@ module CommonMark
     end
 
     rule :text do
-      space.absent? >> (newline.absent? >> delimiter.absent? >> any).repeat(1).as(:text)
+      space.absent? >> ((hard_break.maybe >> newline).absent? >> delimiter.absent? >> any).repeat(1).as(:text)
     end
 
     rule :newline do
@@ -201,7 +206,8 @@ module CommonMark
     end
 
     rule :line_feed do
-      hard_break.maybe >> str("\n")
+      # hard_break.maybe >>
+      str("\n")
     end
 
     rule :hard_break do
