@@ -21,13 +21,12 @@ module CommonMark
       newline
     end
 
-    def block_repeat(body, delimiter, secondary=body)
-      ((body >> delimiter).repeat(1) >> secondary) | body.repeat(1,1)
-    end
+    # def block_repeat(body, delimiter, secondary=body)
+    #   ((body >> delimiter).repeat(1) >> secondary) | body.repeat(1,1)
+    # end
 
     rule :paragraph do
-      (((inline >> newline).repeat(1) >> inline) | inline.repeat(1,1)).as(:paragraph)
-      # (((inline >> newline).repeat(1,1) >> inline)).as(:paragraph) # TODO: fails with repeat(1, nil)
+      ((inline >> newline).repeat(1) >> (any.absent? | inline)).as(:paragraph)
     end
 
     rule :line do
@@ -119,7 +118,8 @@ module CommonMark
 
     rule :inline do
       (escaped | entity | code_span | delimiter |
-        link | image | autolink | text).repeat(1).as(:inline) >> hard_break.maybe
+        link | image | autolink |
+        text).repeat(1).as(:inline) >> hard_break.maybe
     end
 
     rule :autolink do

@@ -3,104 +3,103 @@ require './spec/spec_helper'
 describe CommonMark::Parser do
   describe 'hrule' do
     it 'should parse hline with *' do
-      expect(subject.parse_with_debug('***')).to eq({document: [{hrule: '***'}]})
+      expect(subject.parse('***')).to eq({document: [{hrule: '***'}]})
     end
 
     it 'should parse hline with *' do
-      expect(subject.parse_with_debug('---')).to eq({document: [{hrule: '---'}]})
+      expect(subject.parse('---')).to eq({document: [{hrule: '---'}]})
     end
 
     it 'should parse hline with *' do
-      expect(subject.parse_with_debug('___')).to eq({document: [{hrule: '___'}]})
+      expect(subject.parse('___')).to eq({document: [{hrule: '___'}]})
     end
 
     it 'should parse upto three whitespaces' do
-      expect(subject.parse_with_debug(' ***')).to eq({document: [{hrule: '***'}]})
-      expect(subject.parse_with_debug('  ***')).to eq({document: [{hrule: '***'}]})
-      expect(subject.parse_with_debug('   ***')).to eq({document: [{hrule: '***'}]})
+      expect(subject.parse(' ***')).to eq({document: [{hrule: '***'}]})
+      expect(subject.parse('  ***')).to eq({document: [{hrule: '***'}]})
+      expect(subject.parse('   ***')).to eq({document: [{hrule: '***'}]})
     end
 
     it 'should parse spaces' do
-      expect(subject.parse_with_debug(' - - -')).to eq(
+      expect(subject.parse(' - - -')).to eq(
         {document: [{hrule: '- - -'}]})
-      expect(subject.parse_with_debug(' **  * ** * ** * **')).to eq(
+      expect(subject.parse(' **  * ** * ** * **')).to eq(
         {document: [{hrule: '**  * ** * ** * **'}]})
-      expect(subject.parse_with_debug('-     -      -      -')).to eq(
+      expect(subject.parse('-     -      -      -')).to eq(
         {document: [{hrule: '-     -      -      -'}]})
-      expect(subject.parse_with_debug('- - - -    ')).to eq(
+      expect(subject.parse('- - - -    ')).to eq(
         {document: [{hrule: '- - - -    '}]})
     end
   end
 
   describe 'header' do
     it 'should parse atx headers' do
-      expect(subject.parse_with_debug('# foo')).to eq(
+      expect(subject.parse('# foo')).to eq(
         {document: [{atx_header: {grade: '#', inline: [{text: 'foo'}]}}]})
-      expect(subject.parse_with_debug('## foo')).to eq(
+      expect(subject.parse('## foo')).to eq(
         {document: [{atx_header: {grade: '##', inline: [{text: 'foo'}]}}]})
-      expect(subject.parse_with_debug('### foo')).to eq(
+      expect(subject.parse('### foo')).to eq(
         {document: [{atx_header: {grade: '###', inline: [{text: 'foo'}]}}]})
-      expect(subject.parse_with_debug('#### foo')).to eq(
+      expect(subject.parse('#### foo')).to eq(
         {document: [{atx_header: {grade: '####', inline: [{text: 'foo'}]}}]})
-      expect(subject.parse_with_debug('##### foo')).to eq(
+      expect(subject.parse('##### foo')).to eq(
         {document: [{atx_header: {grade: '#####', inline: [{text: 'foo'}]}}]})
-      expect(subject.parse_with_debug('###### foo')).to eq(
+      expect(subject.parse('###### foo')).to eq(
         {document: [{atx_header: {grade: '######', inline: [{text: 'foo'}]}}]})
-      expect(subject.parse_with_debug('#    foo')).to eq(
+      expect(subject.parse('#    foo')).to eq(
         {document: [{atx_header: {grade: '#', inline: [{text: 'foo'}]}}]})
     end
 
     it 'should parse setext headers' do
-      expect(subject.parse_with_debug("Foo bar\n=========")).to eq(
+      expect(subject.parse("Foo bar\n=========")).to eq(
         {document: [{setext_header:
           {inline: [{text: 'Foo bar'}], grade_1: '========='}}]})
-      expect(subject.parse_with_debug("Foo bar\n---------")).to eq(
+      expect(subject.parse("Foo bar\n---------")).to eq(
         {document: [{setext_header:
           {inline: [{text: 'Foo bar'}], grade_2: '---------'}}]})
     end
   end
 
   it 'should parse indented code blocks' do
-    expect(subject.parse_with_debug("    code block")).to eq(
+    expect(subject.parse("    code block")).to eq(
       {document: [{indented_code: [{text: 'code block'}]}]})
   end
 
   it 'should parse fenced code blocks' do
-    expect(subject.parse_with_debug("```\nhello\nworld\n```")).to eq(
+    expect(subject.parse("```\nhello\nworld\n```")).to eq(
       {document: [{fenced_code_block: [{text: "hello"}, {text: "world"}]}]})
   end
 
   it 'should parse link refernce defitions' do
-    expect(subject.parse_with_debug('[foo]: /url "title"')).to eq(
+    expect(subject.parse('[foo]: /url "title"')).to eq(
       {document: [{ref_def: {ref: 'foo', destination: '/url', title: 'title'}}]})
   end
 
   it 'should parse single line paragraphs' do
-    expect(subject.parse_with_debug('hello world')).to eq(
+    expect(subject.parse('hello world')).to eq(
       {document: [{paragraph: [{inline: [{text: 'hello world'}]}]}]})
   end
 
   it 'should parse multi line paragraphs' do
-    pending 'fixed unbalanced repeats'
-    expect(subject.parse_with_debug("hello\nworld")).to eq(
+    expect(subject.parse("hello\nworld")).to eq(
       {document: [{paragraph: [{inline: [{text: 'hello'}]}, {inline: [{text: 'world'}]}]}]})
-    expect(subject.parse_with_debug("hello \nworld")).to eq(
+    expect(subject.parse("hello \nworld")).to eq(
       {document: [{paragraph: [{inline: [{text: 'hello '}]}, {inline: [{text: 'world'}]}]}]})
   end
 
   describe 'should parse blank lines' do
     it 'should parse spaces' do
-      expect(subject.parse_with_debug(' ')).to    eq({document: [{blank: ' '}]})
-      expect(subject.parse_with_debug('   ')).to  eq({document: [{blank: '   '}]})
-      expect(subject.parse_with_debug('    ')).to eq({document: [{blank: '    '}]})
+      expect(subject.parse(' ')).to    eq({document: [{blank: ' '}]})
+      expect(subject.parse('   ')).to  eq({document: [{blank: '   '}]})
+      expect(subject.parse('    ')).to eq({document: [{blank: '    '}]})
     end
 
     it 'should parse empty lines' do
-      expect(subject.parse_with_debug("\n")).to eq({document: [{blank: "\n"}]})
+      expect(subject.parse("\n")).to eq({document: [{blank: "\n"}]})
     end
 
     it 'should parse itermediary empty lines' do
-      expect(subject.parse_with_debug("hello\n\nworld")).to eq(
+      expect(subject.parse("hello\n\nworld")).to eq(
         {document: [
           {paragraph: [{inline:[{text:"hello"}]}]},
           {blank:"\n"},
@@ -109,19 +108,19 @@ describe CommonMark::Parser do
   end
 
   it 'should parse single block quotes' do
-    expect(subject.parse_with_debug('> hello world')).to eq(
+    expect(subject.parse('> hello world')).to eq(
       {document: [{quote: [{paragraph: [{inline: [{text: 'hello world'}]}]}]}]})
   end
 
   it 'should parse multi block quotes' do
     pending 'fixed unbalanced repeats'
-    expect(subject.parse_with_debug("> hello world\n> hello world")).to eq(
+    expect(subject.parse("> hello world\n> hello world")).to eq(
       {document: [
         {quote: [{paragraph: [{inline: [{text: 'hello world'}]}, {inline: [{text: 'hello world'}]}]}]}]})
   end
 
   it 'should parse ordered lists' do
-    expect(subject.parse_with_debug("1. hello\n2. world")).to eq(
+    expect(subject.parse("1. hello\n2. world")).to eq(
       {document: [
         {ordered_list: [
           {inline: [{text: 'hello'}]},
@@ -130,7 +129,7 @@ describe CommonMark::Parser do
 
   it 'should parse unordered lists' do
     pending 'fixed unbalanced repeats'
-    expect(subject.parse_with_debug("- hello\n- world")).to eq(
+    expect(subject.parse("- hello\n- world")).to eq(
       {document: [
         {unordered_list:[
           {inline: [{text: 'hello'}]},
@@ -138,60 +137,60 @@ describe CommonMark::Parser do
   end
 
   it 'should parse backslash escaped characters' do
-    expect(subject.parse_with_debug('\!')).to eq({document: [{paragraph: [{inline: [{escaped: '!'}]}]}]})
+    expect(subject.parse('\!')).to eq({document: [{paragraph: [{inline: [{escaped: '!'}]}]}]})
   end
 
   it 'should parse html entities' do
-    expect(subject.parse_with_debug('&amp;')).to eq(
+    expect(subject.parse('&amp;')).to eq(
       {document: [{paragraph: [{inline: [{entity: '&amp;'}]}]}]})
-    expect(subject.parse_with_debug('&#123;')).to eq(
+    expect(subject.parse('&#123;')).to eq(
       {document: [{paragraph: [{inline: [{entity: '&#123;'}]}]}]})
-    expect(subject.parse_with_debug('&#x123;')).to eq(
+    expect(subject.parse('&#x123;')).to eq(
       {document: [{paragraph: [{inline: [{entity: '&#x123;'}]}]}]})
   end
 
   it 'should parse code spans' do
-    expect(subject.parse_with_debug('`hello world`')).to eq(
+    expect(subject.parse('`hello world`')).to eq(
       {document: [{paragraph: [{inline: [{code_span: 'hello world'}]}]}]})
   end
 
   it 'should parse emphasis' do
-    expect(subject.parse_with_debug('*hello*')).to eq({document: [{paragraph: [{inline:[
+    expect(subject.parse('*hello*')).to eq({document: [{paragraph: [{inline:[
       {:left_delimiter=>"*"}, {text:"hello"}, {:right_delimiter=>"*"}]}]}]})
   end
 
   it 'should parse strong emphasis' do
-    expect(subject.parse_with_debug('**hello**')).to eq({document: [{paragraph: [{inline: [{
+    expect(subject.parse('**hello**')).to eq({document: [{paragraph: [{inline: [{
       :left_delimiter=>"**"}, {text: 'hello'}, {:right_delimiter=>"**"}]}]}]})
   end
 
   it 'should parse links' do
-    expect(subject.parse_with_debug('[link](/uri "title")')).to eq({document: [{paragraph: [{inline: [{
+    expect(subject.parse('[link](/uri "title")')).to eq({document: [{paragraph: [{inline: [{
       link: {text: 'link', destination: '/uri', title: 'title'}}]}]}]})
   end
 
   it 'should parse links' do
-    expect(subject.parse_with_debug('![description](/uri \'title\')')).to eq({document: [{paragraph: [{inline: [{
+    expect(subject.parse('![description](/uri \'title\')')).to eq({document: [{paragraph: [{inline: [{
       image: {description: 'description', source: '/uri', title: 'title'}}]}]}]})
   end
 
   it 'should parse autolinks' do
-    expect(subject.parse_with_debug('<http://foo.bar.baz>')).to eq(
+    expect(subject.parse('<http://foo.bar.baz>')).to eq(
       {document: [{paragraph: [{inline: [{link: {destination: 'http://foo.bar.baz'}}]}]}]})
   end
 
   it 'should parse hard breaks' do
     pending 'fixed unbalanced repeats'
-    expect(subject.parse_with_debug("hello  \nworld")).to eq(
+    expect(subject.parse("hello  \nworld")).to eq(
       {document: [{paragraph: [{inline: [{text: 'hello'}], hard_break: '  '}, {inline: [{text: 'world'}]}]}]})
   end
 
   it 'should parse plain text' do
-    expect(subject.parse_with_debug('hello $.;\'there')).to eq(
+    expect(subject.parse('hello $.;\'there')).to eq(
       {document: [{paragraph: [{inline: [{text: "hello $.;'there"}]}]}]})
-    expect(subject.parse_with_debug('Foo χρῆν')).to eq(
+    expect(subject.parse('Foo χρῆν')).to eq(
       {document: [{paragraph: [{inline: [{text: "Foo χρῆν"}]}]}]})
-    expect(subject.parse_with_debug('Multiple     spaces')).to eq(
+    expect(subject.parse('Multiple     spaces')).to eq(
       {document: [{paragraph: [{inline: [{text: "Multiple     spaces"}]}]}]})
   end
 end
@@ -201,7 +200,7 @@ end
 #   let!(:parser) { CommonMark::Parser.new }
 
 #   def process stream
-#     subject.apply(parser.parse_with_debug(stream))
+#     subject.apply(parser.parse(stream))
 #   end
 
 #   describe 'priliminaries' do
